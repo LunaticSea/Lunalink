@@ -5,15 +5,25 @@
 
 local class = require('class')
 local manifest = require('manifest')
+local merge_default = require('utils/merge_default')
 
 local lunalink, get = class('Lunalink')
 
-function lunalink:init()
+function lunalink:init(options)
   self._manifest = manifest
+  self._lunalink_options = merge_default(options, self.default_options)
+end
+
+function get:manifest()
+  return self._manifest
+end
+
+function get:lunalink_options()
+  return self._lunalink_options
 end
 
 function lunalink:create(options)
-	p(self.default_options)
+	
 end
 
 function lunalink:destroy(guild_id)
@@ -22,14 +32,6 @@ end
 
 function lunalink:search(query, options)
 
-end
-
-function lunalink:_merge_default(def, given)
-  
-end
-
-function get:manifest()
-  return self._manifest
 end
 
 function get:default_options()
