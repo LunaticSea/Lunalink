@@ -1,4 +1,4 @@
 return {
-  lunalink = require('lunalink'),
+  core = require('lunalink'),
   class = require('class')
 }
