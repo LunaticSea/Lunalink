@@ -9,6 +9,10 @@ return {
 		email = 'xeondev@xeondex.onmicrosoft.com',
 	},
 	homepage = 'https://github.com/LunaticSea/lunalink',
-	dependencies = {},
+	dependencies = {
+		'luvit/coro-http@3.2.4',
+		'luvit/coro-websocket@3.1.1',
+		'luvit/secure-socket@1.2.4',
+	},
 	files = { '**.lua', '!test*' },
 }

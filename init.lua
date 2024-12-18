@@ -1,4 +1,5 @@
 return {
-  core = require('lunalink'),
-  class = require('class')
+  core = require('Lunalink'),
+  class = require('class'),
+  Cache = require('utils/Cache')
 }

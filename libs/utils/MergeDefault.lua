@@ -19,7 +19,7 @@ function Get_keys(tab)
 	return keyset
 end
 
-return function (def, given)
+local function merge_default(def, given)
 	if type(given) == 'nil' then
 		return def
 	end
@@ -47,3 +47,5 @@ return function (def, given)
 
 	return given
 end
+
+return merge_default

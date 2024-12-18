@@ -1,4 +1,4 @@
-local lunalink = require('../libs/lunalink')
+local lunalink = require('libs.Lunalink')
 local manager = lunalink()
 
 manager:create()
