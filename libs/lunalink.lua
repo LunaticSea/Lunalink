@@ -8,6 +8,9 @@ local Cache = require('utils/Cache')
 local NodeManager = require('manager/NodeManager')
 local PlayerManager = require('manager/PlayerManager')
 
+-- Drivers
+local LavalinkFour = require('drivers/LavalinkFour')
+
 -- Props
 local class = require('class')
 local enums = require('enums')
@@ -20,7 +23,7 @@ local Lunalink, get, set = class('Lunalink')
 function Lunalink:init(options)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
-	self._drivers = {}
+	self._drivers = { LavalinkFour }
   self._library = options.library:set(self)
   self._options = options
 	self._options.config = merge_default(self._options.config, self.default_options)
@@ -67,6 +70,7 @@ function Lunalink:init(options)
 			end
 		end
 	end
+	self._library:listen(self._options.nodes)
 end
 
 function get:library()
@@ -126,7 +130,7 @@ function Lunalink:destroy(guild_id)
 end
 
 function Lunalink:search(query, options)
-
+	-- Will do later
 end
 
 function Lunalink:_initialSearchEngines()

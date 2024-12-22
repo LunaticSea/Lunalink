@@ -25,7 +25,7 @@ end
 
 function NodeManager:getLeastUsed(custom_node_array)
 	local nodes = custom_node_array and  custom_node_array or self:values()
-	local custom_resolver = self._lunalink.options.config.nodeResolver
+	local custom_resolver = self._lunalink._options.config.nodeResolver
 
 	if custom_resolver then
 		local resolver_data = custom_resolver(nodes)
@@ -82,7 +82,7 @@ end
 
 function NodeManager:debug(logs, ...)
 	local pre_res = string.format(logs, ...)
-	local res = string.format('[Rainlink] / [NodeManager] | %s', pre_res)
+	local res = string.format('[Lunalink] / [NodeManager] | %s', pre_res)
 	self._lunalink:emit(Events.Debug, res)
 end
 

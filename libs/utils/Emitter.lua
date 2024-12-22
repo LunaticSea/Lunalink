@@ -12,7 +12,7 @@ local insert, remove = table.insert, table.remove
 
 local Emitter = require('class')('Emitter')
 
-function Emitter:__init()
+function Emitter:init()
 	self._listeners = {}
 end
 

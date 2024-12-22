@@ -1,21 +1,31 @@
-local crhttp = require('coro-http')
+local ws = require('utils/Websocket')
+local lock = false
+local websocket = ws({
+  url = 'ws://localhost:2333/v3/websocket',
+  headers = {
+    { 'authorization', 'youshallnotpass' },
+    { 'user-id', '992776455790534667' },
+    { 'client-name', 'Lunalink/1.0.0' },
+  }
+})
 
-local json = require("json")
+websocket:on('open', function (selfws)
+  print('Node connected on: ' .. selfws._url)
+end)
 
-local lavalink_url = "http://192.168.0.107:2333/v4/stats"
+websocket:on('close', function (code, reason)
+  print(string.format('Node closed. Code: %s Reason: %s', code, reason))
+end)
 
-local headers = {
-  { 'authorization', 'youshallnotpass' },
-  { "content-type", "application/json" },
-}
+websocket:on('message', function (res)
+  p(res.json_payload)
+  if res.json_payload.op == 'stats' then
+    websocket:send({ op = "stop", guildId = "1084918771967344662" })
+    if lock then return p(websocket._listeners) end
+    websocket:close()
+    websocket:connect()
+    lock = true
+  end
+end)
 
--- Send the POST request
-local res, res_data = crhttp.request("GET", lavalink_url, headers)
-
--- Was the request successful?
-if res.code < 200 or res.code >= 300 then
-   return print("Failed to send req: " .. res.reason)
-end
-
-print("Req sent successfully!")
-p(res_data)
+websocket:connect()
