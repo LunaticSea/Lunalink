@@ -2,11 +2,14 @@ local class = require('class')
 local setTimeout = require('timer').setTimeout
 local Events = require('const').Events
 local enums = require('enums')
+
 local ConnectState = enums.ConnectState
 local LavalinkEventsEnum = enums.LavalinkEventsEnum
+
 local Rest = require('node/Rest')
 local PlayerEvents = require('node/PlayerEvents')
 local LavalinkFour = require('drivers/LavalinkFour')
+
 local Node, get = class('Node')
 
 function Node:init(lunalink, options)
@@ -25,7 +28,7 @@ function Node:init(lunalink, options)
     self._driver = get_driver[1](lunalink, self)
   end
 
-  self._wsEvent = PlayerEvents()
+  self._wsEvent = PlayerEvents(lunalink)
 
   self._stats = {
     players = 0,
@@ -112,12 +115,12 @@ function Node:wsMessageEvent(data)
   end
 
   if data.op == LavalinkEventsEnum.Event then
-    self._wsEvent:initial(data, self._lunalink)
+    self._wsEvent:initial(data)
     return
   end
 
   if data.op == LavalinkEventsEnum.PlayerUpdate then
-    self._wsEvent:initial(data, self._lunalink)
+    self._wsEvent:initial(data)
     return
   end
 
