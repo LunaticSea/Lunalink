@@ -4,7 +4,7 @@ local AllowedPackets = { 'VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE' }
 
 local AbstractLibrary, get = class('AbstractLibrary')
 
-function AbstractLibrary:init(client)
+function AbstractLibrary:__init(client)
   self._client = client
 end
 

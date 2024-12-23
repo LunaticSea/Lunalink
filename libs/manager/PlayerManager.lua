@@ -10,8 +10,8 @@ local PlayerState = enums.PlayerState
 
 local PlayerManager, get = class('PlayerManager', Cache)
 
-function PlayerManager:init(lunalink)
-  Cache.init(self)
+function PlayerManager:__init(lunalink)
+  Cache.__init(self)
   self._lunalink = lunalink
 end
 

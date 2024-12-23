@@ -10,7 +10,7 @@ local LavalinkEventsEnum = enums.LavalinkEventsEnum
 
 local PlayerEvents = class('PlayerEvents')
 
-function PlayerEvents:init(lunalink)
+function PlayerEvents:__init(lunalink)
   self._lunalink = lunalink
 end
 

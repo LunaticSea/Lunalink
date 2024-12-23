@@ -4,7 +4,7 @@ local const = require('const')
 local Events = const.Events
 local Queue, get = class('Queue')
 
-function Queue:init(lunalink, player)
+function Queue:__init(lunalink, player)
   self._list = {}
   self._previous = {}
   self._current = nil

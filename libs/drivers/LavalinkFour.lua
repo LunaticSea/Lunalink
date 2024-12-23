@@ -7,8 +7,8 @@ local Functions = require('utils/Functions')
 local LavalinkFour, get = class('LavalinkFour', abstract)
 local sf = string.format
 
-function LavalinkFour:init(lunalink, node)
-  abstract.init(self)
+function LavalinkFour:__init(lunalink, node)
+  abstract.__init(self)
   self._lunalink = lunalink
   self._node = node
   self._id = 'koinu'

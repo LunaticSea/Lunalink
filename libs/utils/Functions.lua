@@ -2,8 +2,8 @@ local class = require('class')
 local Cache = require('utils/Cache')
 local Functions = class('Functions', Cache)
 
-function Functions:init()
-  Cache.init(self)
+function Functions:__init()
+  Cache.__init(self)
 end
 
 function Functions:exec(commandName, ...)

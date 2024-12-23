@@ -4,7 +4,7 @@ local Rest, get = class('Rest')
 
 local f = string.format
 
-function Rest:init(lunalink, options, node)
+function Rest:__init(lunalink, options, node)
   self._lunalink = lunalink
   self._node = node
   self._options = options

@@ -12,7 +12,7 @@ local LavalinkFour = require('drivers/LavalinkFour')
 
 local Node, get = class('Node')
 
-function Node:init(lunalink, options)
+function Node:__init(lunalink, options)
   self._lunalink = lunalink
   self._options = options
 

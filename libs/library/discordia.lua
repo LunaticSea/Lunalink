@@ -4,8 +4,8 @@ local class = require('class')
 
 local Discordia, get = class('Discordia', AbstractLibrary)
 
-function Discordia:init(client)
-  AbstractLibrary.init(self, client)
+function Discordia:__init(client)
+  AbstractLibrary.__init(self, client)
   self._client = client
 end
 

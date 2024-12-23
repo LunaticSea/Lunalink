@@ -6,7 +6,7 @@ local PlayerState = require('enums').PlayerState
 
 local AudioFilter, get = class('AudioFilter')
 
-function AudioFilter:init(player)
+function AudioFilter:__init(player)
   self._current = nil
   self._player = player
 end

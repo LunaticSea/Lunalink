@@ -7,8 +7,8 @@ local ws = class('Websocket', Emitter)
 
 -- options.url
 -- options.headers
-function ws:init(options)
-	Emitter.init(self)
+function ws:__init(options)
+	Emitter.__init(self)
 	self._config = websocket.parseUrl(options.url)
 	self._config.headers = options.headers
 	self._url = options.url

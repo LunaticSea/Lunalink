@@ -20,7 +20,7 @@ local merge_default = require('utils/MergeDefault')
 
 local Lunalink, get, set = class('Lunalink')
 
-function Lunalink:init(options)
+function Lunalink:__init(options)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
 	self._drivers = { LavalinkFour }

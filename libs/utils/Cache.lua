@@ -2,7 +2,7 @@ local class = require('class')
 
 local Cache = class('Cache')
 
-function Cache:init()
+function Cache:__init()
   self._cache = {}
 end
 

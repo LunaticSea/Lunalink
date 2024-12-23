@@ -10,7 +10,7 @@
 local class = require('class')
 local tc, get = class('tc')
 
-function tc:init() end
+function tc:__init() end
 
 function get:id() return 'Hello world' end
 

@@ -3,7 +3,7 @@ local Events = require('const').Events
 
 local AbstractDriver, get = class('AbstractDriver')
 
-function AbstractDriver:init() end
+function AbstractDriver:__init() end
 
 function get:id()
   error('driver id missing')

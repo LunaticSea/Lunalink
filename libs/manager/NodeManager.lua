@@ -7,8 +7,8 @@ local Events = require('const').Events
 
 local NodeManager, get = class('NodeManager', Cache)
 
-function NodeManager:init(lunalink)
-  Cache.init(self)
+function NodeManager:__init(lunalink)
+  Cache.__init(self)
   self._lunalink = lunalink
 end
 
