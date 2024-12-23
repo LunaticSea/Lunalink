@@ -1,8 +1,3 @@
---[=[
-@c Lunalink
-@d The heart of Rainlink. Manage all package action
-]=]
-
 -- Classes
 local Cache = require('utils/Cache')
 local NodeManager = require('manager/NodeManager')
@@ -18,8 +13,23 @@ local SourceIDs = require('const').SourceIDs
 local manifest = require('manifest')
 local merge_default = require('utils/MergeDefault')
 
+--- The heart of Lunalink. Manage all package action
+--- @class Lunalink
+--- @field library AbstractLibrary Discord library connector
+--- @field nodes NodeManager Lavalink server that has been configured
+--- @field options LunalinkOptions Lunalink options, see get:default_options
+--- @field id string Bot id
+--- @field players PlayerManager All currently running players
+--- @field searchEngine Cache All search engines
+--- @field searchPlugins Cache All search plugins (resolver plugins)
+--- @field plugins Cache All plugins (include resolver plugins)
+--- @field drivers AbstractDriver All avaliable lunalink drivers
+--- @field shardCount number The current bott's shard count
+--- @field voices Cache All voice handler currently
 local Lunalink, get, set = class('Lunalink')
 
+--- @param options table
+--- @protected
 function Lunalink:__init(options)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
@@ -121,14 +131,24 @@ function get:manifest()
   return self._manifest
 end
 
+--- Create a new player.
+--- @param options VoiceChannelOptions Options for creating player
+--- @return Player
 function Lunalink:create(options)
-	self._players:create(options)
+	return self._players:create(options)
 end
 
+--- Destroy a specific player.
+--- @param guild_id string Target guild id
+--- @return nil
 function Lunalink:destroy(guild_id)
 	self._players:destroy(guild_id)
 end
 
+--- Search a specific track.
+--- @param query string Target guild id
+--- @param options SearchOptions Some options when search
+--- @return nil
 function Lunalink:search(query, options)
 	-- Will do later
 end

@@ -1,0 +1,6 @@
+--- The structures options interface for custom class/structures
+--- @class Structures
+--- @field rest class A custom structure that extends the Rest class `class('Extended', require('lunalink').Rest)`
+--- @field player class A custom structure that extends the Player class `class('Extended', require('lunalink').Player)`
+--- @field queue class A custom structure that extends the Queue class `class('Extended', require('lunalink').Queue)`
+--- @field filter class A custom structure that extends the Filter class `class('Extended', require('lunalink').Filter)`

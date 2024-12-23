@@ -1,0 +1,6 @@
+--- Lunalink config interface
+--- @class LunalinkOptions
+--- @field nodes RainlinkNodeOptions The lavalink server credentials table
+--- @field library AbstractLibrary The discord library for using voice manager, example: discordjs, erisjs
+--- @field plugins LunalinkPlugin The rainlink plugins array. Check Plugin
+--- @field config LunalinkConfig Lunalink config options

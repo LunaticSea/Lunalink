@@ -1,0 +1,15 @@
+{
+  "Lua.diagnostics.disable": [
+    "deprecated",
+    "undefined-field",
+    "different-requires",
+    "undefined-doc-name",
+    "undefined-doc-class",
+    "need-check-nil",
+    "duplicate-doc-alias",
+    "inject-field",
+    "return-type-mismatch",
+    "param-type-mismatch",
+    "doc-field-no-class"
+  ]
+}

@@ -14,5 +14,5 @@ return {
 		'luvit/coro-websocket@3.1.1',
 		'luvit/secure-socket@1.2.4',
 	},
-	files = { '**.lua', '!test*' },
+	files = { '**.lua', '!test*', 'docref' },
 }
