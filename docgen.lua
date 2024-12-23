@@ -280,7 +280,11 @@ local function writeProperties(f, properties)
 	f:write('| Name | Type | Description |\n')
 	f:write('|-|-|-|\n')
 	for _, v in ipairs(properties) do
-		f:write('| ', v.name, ' | ', link(v.type), ' | ', v.desc, ' |\n')
+		local final_desc = v.desc
+		if string.match(v.desc, '\r') then
+			final_desc = final_desc:sub(1, -2)
+		end
+		f:write('| ', v.name, ' | ', link(v.type), ' | ', final_desc, ' |\n')
 	end
 	f:write('\n')
 end
