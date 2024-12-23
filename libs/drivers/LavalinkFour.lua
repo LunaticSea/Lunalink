@@ -150,7 +150,7 @@ function LavalinkFour:requester(options)
 
   self:debug("%s %s %s", req_method, url, req_body)
 
-  return final_data or {}
+  return final_data or res_body_string
 end
 
 function LavalinkFour:wsClose()
