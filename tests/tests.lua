@@ -14,8 +14,8 @@ function tc:init() end
 
 function get:id() return 'Hello world' end
 
+local test = tc()
 
-
-p(tc.__getters:id())
+p(test.__name)
 
 p(string.format('%s/%s', 'high', ''))

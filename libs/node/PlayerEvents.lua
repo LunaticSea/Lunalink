@@ -10,13 +10,6 @@ local LavalinkEventsEnum = enums.LavalinkEventsEnum
 
 local PlayerEvents = class('PlayerEvents')
 
--- Note: custom prop
--- player._queue._length
--- player._queue:unshift
--- player._queue:push
--- player._queue._current
--- player._queue._previous
-
 function PlayerEvents:init(lunalink)
   self._lunalink = lunalink
 end
@@ -48,7 +41,7 @@ function PlayerEvents:TrackEndEvent(data)
     return self:debug(data.guildId, 'End', 'Player %s destroyed from end event', player._guildId)
   end
 
-  self:debug(data.guildId, 'End', 'Tracks: %s ' .. json.decode(data), player._queue._length)
+  self:debug(data.guildId, 'End', 'Tracks: %s ' .. json.decode(data), player._queue.size)
 
   player._playing = false
   player._paused = true
@@ -61,7 +54,7 @@ function PlayerEvents:TrackEndEvent(data)
     if player._queue._current then
       table.insert(player._queue._previous, player._queue._current)
     end
-    if player._queue._length == 0 and player._sudoDestroy then
+    if player._queue.size == 0 and player._sudoDestroy then
       return self._lunalink:emit(Events.QueueEmpty, player, player._queue)
     end
     self._lunalink:emit(Events.QueueEmpty, player, player._queue)
@@ -70,22 +63,23 @@ function PlayerEvents:TrackEndEvent(data)
   end
 
   if player.loop == LoopMode.SONG and player.queue.current then
-    player._queue:unshift(player._queue._current)
+    table.insert(player._queue._list, 1, player._queue._current)
   end
 
   if player.loop == LoopMode.QUEUE and player.queue.current then
-    player._queue:push(player._queue._current)
+    table.insert(player._queue._list, player._queue._current)
   end
 
   if player._queue._current then
     table.insert(player._queue._previous, player._queue._current)
   end
+
   local currentSong = player._queue._current
   player._queue._current = nil
 
-  if player.queue.length ~= 0 then
+  if player.queue.size ~= 0 then
     self._lunalink:emit(Events.TrackEnd, player, currentSong)
-  elseif player._queue._length == 0 and not player._sudoDestroy then
+  elseif player._queue.size == 0 and not player._sudoDestroy then
     return self._lunalink:emit(Events.QueueEmpty, player, player.queue)
   else return end
 
