@@ -223,13 +223,15 @@ for f in coroutine.wrap(scan), './libs' do
 		if t == 'ignore' then
 			goto continue
 		elseif t == 'class' then
-			initClass(s, comments[i])
+			if class.name then
+				local dev_c, dev_c_init = newClass()
+				dev_c_init(s, comments[i])
+				class = dev_c
+			else
+				initClass(s, comments[i])
+			end
 		elseif t == 'param' or t == 'return' then
 			local method = matchMethod(s, comments[i])
-			if not class.methodTags then
-				print('warning: class ' .. f .. ' has not been initialized')
-				goto continue
-			end
 			for k, v in pairs(class.methodTags) do
 				method.tags[k] = v
 			end
@@ -239,6 +241,10 @@ for f in coroutine.wrap(scan), './libs' do
 		::continue::
 	end
 end
+
+-- for key, value in pairs(docs) do
+-- 	p(key, value.name)
+-- end
 
 ----
 
@@ -280,11 +286,7 @@ local function writeProperties(f, properties)
 	f:write('| Name | Type | Description |\n')
 	f:write('|-|-|-|\n')
 	for _, v in ipairs(properties) do
-		local final_desc = v.desc
-		if string.match(v.desc, '\r') then
-			final_desc = final_desc:sub(1, -2)
-		end
-		f:write('| ', v.name, ' | ', link(v.type), ' | ', final_desc, ' |\n')
+		f:write('| ', v.name, ' | ', link(v.type), ' | ', v.desc, ' |\n')
 	end
 	f:write('\n')
 end
@@ -407,7 +409,7 @@ for _, class in pairs(docs) do
 
 	f:write(class.desc, '\n\n')
 
-	checkTags(class.tags, {'interface', 'abstract', 'patch'})
+	checkTags(class.tags, {'interface', 'abstract', 'patch', 'enums'})
 	if class.tags.interface then
 		writeHeading(f, 'Constructor')
 		f:write('### ', class.name)
@@ -416,6 +418,8 @@ for _, class in pairs(docs) do
 		f:write('*This is an abstract base class. Direct instances should never exist.*\n\n')
   elseif class.tags.patch then
     f:write("*This is a patched class.\nFor full usage refer to the Discordia Wiki, only patched methods and properities are documented here.*\n\n")
+  elseif class.tags.enums then
+    f:write("")
 	else
 		f:write('*Instances of this class should not be constructed by users.*\n\n')
 	end

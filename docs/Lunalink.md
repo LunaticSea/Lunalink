@@ -1,22 +1,25 @@
 The heart of Lunalink. Manage all package action
 
-*Instances of this class should not be constructed by users.*
+## Constructor
+
+### Lunalink()
 
 ## Properties
 
 | Name | Type | Description |
 |-|-|-|
-| drivers | AbstractDriver | All avaliable lunalink drivers |
-| id | string | Bot id |
-| library | AbstractLibrary | Discord library connector |
-| nodes | NodeManager | Lavalink server that has been configured |
-| options | [[LunalinkOptions]] | Lunalink options, see get:default_options |
-| players | PlayerManager | All currently running players |
-| plugins | Cache | All plugins (include resolver plugins) |
-| searchEngine | Cache | All search engines |
-| searchPlugins | Cache | All search plugins (resolver plugins) |
-| shardCount | number | The current bott's shard count |
-| voices | Cache | All voice handler currently |
+| default_options | [[LunalinkConfig]] | the default configurations |
+| drivers | AbstractDriver | All avaliable lunalink drivers |
+| id | string | Bot id |
+| library | AbstractLibrary | Discord library connector |
+| nodes | NodeManager | Lavalink server that has been configured |
+| options | [[LunalinkOptions]] | Lunalink options, see get:default_options |
+| players | PlayerManager | All currently running players |
+| plugins | Cache | All plugins (include resolver plugins) |
+| searchEngine | Cache | All search engines |
+| searchPlugins | Cache | All search plugins (resolver plugins) |
+| shardCount | number | The current bott's shard count |
+| voices | Cache | All voice handler currently |
 
 ## Methods
 
@@ -24,7 +27,7 @@ The heart of Lunalink. Manage all package action
 
 | Parameter | Type |
 |-|-|
-| options | table |
+| options | [[LunalinkOptions]] |
 
 
 

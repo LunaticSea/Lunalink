@@ -6,6 +6,6 @@ Search fallback config
 
 | Name | Type | Description |
 |-|-|-|
-| enable | boolean | Whenever enable this search fallback or not |
+| enable | boolean | Whenever enable this search fallback or not |
 | engine | string | Choose a fallback search engine, recommended soundcloud and youtube |
 

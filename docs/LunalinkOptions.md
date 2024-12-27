@@ -7,7 +7,7 @@ Lunalink config interface
 | Name | Type | Description |
 |-|-|-|
 | config | [[LunalinkConfig]] | Lunalink config options |
-| library | AbstractLibrary | The discord library for using voice manager, example: discordjs, erisjs |
-| nodes | RainlinkNodeOptions | The lavalink server credentials table |
-| plugins | LunalinkPlugin | The rainlink plugins array. Check Plugin |
+| library | AbstractLibrary | The discord library for using voice manager, example: discordjs, erisjs |
+| nodes | RainlinkNodeOptions | The lavalink server credentials table |
+| plugins | LunalinkPlugin | The rainlink plugins array. Check Plugin |
 

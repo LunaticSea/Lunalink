@@ -15,6 +15,7 @@ local merge_default = require('utils/MergeDefault')
 
 --- The heart of Lunalink. Manage all package action
 --- @class Lunalink
+--- <!tag:interface>
 --- @field library AbstractLibrary Discord library connector
 --- @field nodes NodeManager Lavalink server that has been configured
 --- @field options LunalinkOptions Lunalink options, see get:default_options
@@ -26,10 +27,11 @@ local merge_default = require('utils/MergeDefault')
 --- @field drivers AbstractDriver All avaliable lunalink drivers
 --- @field shardCount number The current bott's shard count
 --- @field voices Cache All voice handler currently
+--- @field default_options LunalinkConfig the default configurations
+
 local Lunalink, get, set = class('Lunalink')
 
---- @param options table
---- @protected
+--- @param options LunalinkOptions
 function Lunalink:__init(options)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
