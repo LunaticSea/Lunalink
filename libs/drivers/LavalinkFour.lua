@@ -1,7 +1,7 @@
 local class = require('class')
 local json = require('json')
 local http = require('coro-http')
-local websocket = require('utils/Websocket')
+local websocket = require('utils/WebSocket')
 local abstract = require('drivers/AbstractDriver')
 local Functions = require('utils/Functions')
 local LavalinkFour, get = class('LavalinkFour', abstract)

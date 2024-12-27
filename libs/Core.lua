@@ -14,7 +14,7 @@ local manifest = require('manifest')
 local merge_default = require('utils/MergeDefault')
 
 --- The heart of Lunalink. Manage all package action
---- @class Lunalink
+--- @class Core
 --- <!tag:interface>
 --- @field library AbstractLibrary Discord library connector
 --- @field nodes NodeManager Lavalink server that has been configured
