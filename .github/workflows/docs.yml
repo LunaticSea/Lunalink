@@ -10,11 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          token: ${{ secrets.PERSONAL }}
           repository: '${{ github.repository }}.wiki'
           path: 'wiki'
 
       - uses: actions/checkout@v4
         with:
+          token: ${{ secrets.PERSONAL }}
           path: 'repo'
 
       - name: Install Luvit
