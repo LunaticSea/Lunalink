@@ -8,6 +8,6 @@ jobs:
   push_doc:
     runs-on: ubuntu-latest
     steps:
-      - uses: discordia-docgen-action@main
+      - uses: Bilal2453/discordia-docgen-action@main
         with:
           token: ${{ secrets.PERSONAL }}
