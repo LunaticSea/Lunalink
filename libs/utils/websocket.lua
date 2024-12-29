@@ -13,11 +13,10 @@ local Emitter = require('utils/Emitter')
 
 --- Modified version of coro-websocket with event based
 --- @class WebSocket: Emitter
---- @field options WebSocketOptions Options for modified websocket
 --- <!tag:interface>
 local ws = class('Websocket', Emitter)
 
---- @param options Blah blah
+--- @param options WebSocketOptions Options for modified websocket
 function ws:__init(options)
 	Emitter.__init(self)
 	self._config = websocket.parseUrl(options.url)
