@@ -2,6 +2,7 @@
 local Cache = require('utils/Cache')
 local NodeManager = require('manager/NodeManager')
 local PlayerManager = require('manager/PlayerManager')
+local Emitter = require('utils/Emitter')
 
 -- Drivers
 local LavalinkFour = require('drivers/LavalinkFour')
@@ -14,7 +15,7 @@ local manifest = require('manifest')
 local merge_default = require('utils/MergeDefault')
 
 --- The heart of Lunalink. Manage all package action
---- @class Core
+--- @class Core: Emitter
 --- <!tag:interface>
 --- @field library AbstractLibrary Discord library connector
 --- @field nodes NodeManager Lavalink server that has been configured
@@ -29,10 +30,11 @@ local merge_default = require('utils/MergeDefault')
 --- @field voices Cache All voice handler currently
 --- @field default_options LunalinkConfig the default configurations
 
-local Lunalink, get, set = class('Lunalink')
+local Lunalink, get, set = class('Lunalink', Emitter)
 
 --- @param options LunalinkOptions
 function Lunalink:__init(options)
+	Emitter.__init(self)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
 	self._drivers = { LavalinkFour }

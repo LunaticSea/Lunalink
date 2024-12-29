@@ -9,14 +9,12 @@ local Events = {
   -- Player
   PlayerCreate = 'playerCreate',
   PlayerDestroy = 'playerDestroy',
-  PlayerConnect = 'playerConnect',
-  PlayerDisconnect = 'playerDisconnect',
   PlayerUpdate = 'playerUpdate',
-  PlayerMoved = 'playerMoved',
   PlayerPause = 'playerPause',
   PlayerResume = 'playerResume',
   PlayerException = 'playerException',
   PlayerWebsocketClosed = 'playerWebsocketClosed',
+	PlayerStop = 'playerStop',
   -- Track
   TrackStuck = 'trackStuck',
   TrackStart = 'trackStart',

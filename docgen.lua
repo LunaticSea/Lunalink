@@ -242,10 +242,6 @@ for f in coroutine.wrap(scan), './libs' do
 	end
 end
 
--- for key, value in pairs(docs) do
--- 	p(key, value.name)
--- end
-
 ----
 
 local output = 'docs'
@@ -459,4 +455,10 @@ for _, class in pairs(docs) do
 
 	f:close()
 
+end
+
+for f in coroutine.wrap(scan), './exdoc' do
+	local new_dir = 'docs/' .. string.match(f, 'exdoc/(.*)')
+	local d = assert(fs.readFileSync(f))
+	fs.writeFileSync(new_dir, d)
 end

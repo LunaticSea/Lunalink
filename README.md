@@ -49,11 +49,7 @@ Comming Soon
 
 | Creator                                              | Insipred Product                                         | Item                    |
 |------------------------------------------------------|----------------------------------------------------------|-------------------------|
-| [@Deivu](https://github.com/Deivu)                   | [Shoukaku](https://www.npmjs.com/package/shoukaku)       | Voice / REST            |
-| [@Takiyo0](https://github.com/Takiyo0)               | [Kazagumo](https://www.npmjs.com/package/kazagumo)       | Player / Queue          |
-| [@Solaris9](https://github.com/Solaris9)             | [erela.js](https://www.npmjs.com/package/erela.js)       | Event name System       |
 | [@cloudwithax](https://github.com/cloudwithax)       | [flare](https://github.com/cloudwithax/flare)            | Websocket Usage Example |
-| [@SinisterRectus](https://github.com/SinisterRectus) | [Discordia](https://github.com/SinisterRectus/Discordia) | Class System            |
 
 - **And everyone who contribute my project 💗**
 

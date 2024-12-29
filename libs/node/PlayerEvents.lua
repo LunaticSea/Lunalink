@@ -29,7 +29,7 @@ function PlayerEvents:TrackStartEvent(data)
   player._playing = true
   player._paused = false
   self._lunalink:emit(Events.TrackStart, player, player._queue._current)
-  self:debug(data.guildId, 'Start', json.decode(data))
+  self:debug(data.guildId, 'Start', json.encode(data))
 end
 
 function PlayerEvents:TrackEndEvent(data)
@@ -41,7 +41,7 @@ function PlayerEvents:TrackEndEvent(data)
     return self:debug(data.guildId, 'End', 'Player %s destroyed from end event', player._guildId)
   end
 
-  self:debug(data.guildId, 'End', 'Tracks: %s ' .. json.decode(data), player._queue.size)
+  self:debug(data.guildId, 'End', 'Tracks: %s ' .. json.encode(data), player._queue.size)
 
   player._playing = false
   player._paused = true
@@ -93,7 +93,7 @@ function PlayerEvents:TrackExceptionEvent(data)
   player._playing = false
   player._paused = true
   self._lunalink:emit(Events.PlayerException, player, data)
-  self:debug(data.guildId, 'Exception', json.decode(data))
+  self:debug(data.guildId, 'Exception', json.encode(data))
 end
 
 function PlayerEvents:TrackStuckEvent(data)
@@ -103,7 +103,7 @@ function PlayerEvents:TrackStuckEvent(data)
   player._playing = false
   player._paused = true
   self._lunalink:emit(Events.TrackStuck, player, data)
-  self:debug(data.guildId, 'Stuck', json.decode(data))
+  self:debug(data.guildId, 'Stuck', json.encode(data))
 end
 
 function PlayerEvents:WebSocketClosedEvent(data)
@@ -113,7 +113,7 @@ function PlayerEvents:WebSocketClosedEvent(data)
   player._playing = false
   player._paused = true
   self._lunalink:emit(Events.PlayerWebsocketClosed, player, data)
-  self:debug(data.guildId, 'WebsocketClosed', json.decode(data))
+  self:debug(data.guildId, 'WebsocketClosed', json.encode(data))
 end
 
 function PlayerEvents:PlayerUpdate(data)
@@ -121,7 +121,7 @@ function PlayerEvents:PlayerUpdate(data)
   if not player then return end
 
   player._position = data.state.position
-  self:debug(data.guildId, 'Updated', json.decode(data))
+  self:debug(data.guildId, 'Updated', json.encode(data))
   self._lunalink:emit(Events.PlayerUpdate, player, data)
 end
 
