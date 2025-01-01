@@ -82,7 +82,7 @@ The enumerations are designed to be compatible with the Discord API. They are no
 |SESSION_ENDPOINT_MISSING|2|
 |SESSION_FAILED_UPDATE|3|
 
-## LavalinkLoadType
+## VoiceConnectState
 |Name|Value|
 |-|-|
 |CONNECTING|0|

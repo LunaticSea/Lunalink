@@ -1,21 +1,12 @@
--- local lunalink = require('libs.Lunalink')
--- local manager = lunalink()
+local function _region_converter(data)
+  local preres = {}
+  for part in data:gmatch("([^%.]+)") do
+    table.insert(preres, part)
+  end
 
--- manager:create()
+  local res = preres[1]
 
--- p(manager.manifest)
+  return res:gsub("%d", "")
+end
 
--- p(manager.default_options)
-
-local class = require('class')
-local tc, get = class('tc')
-
-function tc:__init() end
-
-function get:id() return 'Hello world' end
-
-local test = tc()
-
-p(test.__name)
-
-p(string.format('%s/%s', 'high', ''))
+p(_region_converter('hongkong8.helper'))
