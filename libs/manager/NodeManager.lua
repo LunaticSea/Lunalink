@@ -32,7 +32,7 @@ function NodeManager:add(node)
 end
 
 ---Get a least used node.
----@param custom_node_array 'array of [[Node]]'
+---@param custom_node_array 'Table<[[Node]]>'
 ---@return Node
 function NodeManager:getLeastUsed(custom_node_array)
 	local nodes = custom_node_array and  custom_node_array or self:values()

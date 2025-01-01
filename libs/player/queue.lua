@@ -1,9 +1,25 @@
 local class = require('class')
-local json = require('json')
 local const = require('const')
 local Events = const.Events
+
+---A class for managing track queue
+---@class Queue
+---<!tag:interface>
+---@field player Player A player class
+---@field current '[[Track]]/nil' Current playing track
+---@field previous 'Table<[[Track]]>' Previous playing tracks
+---@field list 'Table<[[Track]]>' Current playing tracks
+---@field lunalink Core Manager class
+---@field size number Get the size of queue
+---@field totalSize number Get the size of queue including current
+---@field isEmpty boolean Check if the queue is empty or not
+---@field duration number Get the queue's duration
+
 local Queue, get = class('Queue')
 
+---The lunalink track queue handler class
+---@param lunalink Core
+---@param player Player
 function Queue:__init(lunalink, player)
   self._list = {}
   self._previous = {}
@@ -50,6 +66,9 @@ function get:duration()
   end, 0)
 end
 
+---Add track(s) to the queue
+---@param track Track
+---@return Queue
 function Queue:add(track)
   if type(track) == "table" then
     local full_check = self:_some(track, function (t)
@@ -88,6 +107,8 @@ function Queue:add(track)
   return self
 end
 
+---Shuffle the queue
+---@return Queue
 function Queue:shuffle()
   math.randomseed(os.time())
   for i = #self._list, 2, -1 do
@@ -98,6 +119,9 @@ function Queue:shuffle()
   return self
 end
 
+---Remove track from the queue
+---@param position number
+---@return Queue
 function Queue:remove(position)
   if position < 1 or position >= #self._list then
     error('Position must be between 1 and ' .. #self._list)
@@ -107,6 +131,8 @@ function Queue:remove(position)
   return self
 end
 
+---Clear the queue
+---@return Queue
 function Queue:clear()
   self._list = {}
   self._lunalink:emit(Events.QueueClear, self._player, self)

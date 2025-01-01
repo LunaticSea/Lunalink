@@ -4,7 +4,7 @@ local FilterData = require('const').FilterData
 local Events = require('const').Events
 local PlayerState = require('enums').PlayerState
 
----The heart of Lunalink. Manage all package action
+---This class is for set, clear and managing filter
 ---@class AudioFilter
 ---<!tag:interface>
 ---@field player Player A player class
@@ -77,7 +77,7 @@ function AudioFilter:setVolume(volume)
 end
 
 ---Set equalizer in filter
----@param equalizer 'array with { band = number, gain = number }'
+---@param equalizer 'Table<{ band = number, gain = number }>'
 ---@return Player
 function AudioFilter:setEqualizer(equalizer)
   return self:setRaw({ equalizer = equalizer })
