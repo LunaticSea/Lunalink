@@ -1,0 +1,6 @@
+---Interface for :updatePlayer() function
+---@class UpdatePlayerInfo
+---<!tag:properties>
+---@field guildId string Target guild identifier
+---@field playerOptions '[UpdatePlayer](https://lavalink.dev/api/rest.html#update-player)' Player options to update
+---@field noReplace boolean Whether to replace the current track with the new track

@@ -1,8 +1,21 @@
 local class = require('class')
 local Events = require('const').Events
 
+---The interface class to make a custom driver for audio node
+---@class AbstractDriver
+---<!tag:interface>
+---@field id string A driver id to identify
+---@field wsUrl string Websocket url
+---@field httpUrl string Http url for requesting REST api
+---@field sessionId string Session id is for restoreing previous state when lost connection
+---@field playerFunctions Functions List of custom functions for Player
+---@field functions Functions List of custom function for Driver
+---@field lunalink Core Core class for getting some useful information
+---@field node Node A node class to get some basic information like credentials
+
 local AbstractDriver, get = class('AbstractDriver')
 
+---Initial function for AbstractDriver
 function AbstractDriver:__init() end
 
 function get:id()
@@ -37,18 +50,22 @@ function get:node()
   error('driver node missing')
 end
 
+---A function to connect to current node
 function AbstractDriver:connect()
   error('driver function: connect missing')
 end
 
+---A http requester for REST api
 function AbstractDriver:requester()
   error('driver function: requester missing')
 end
 
+---A function to close connection to current node
 function AbstractDriver:wsClose()
   error('driver function: wsClose missing')
 end
 
+---A function to update a new session
 function AbstractDriver:updateSession()
   error('driver function: updateSession missing')
 end

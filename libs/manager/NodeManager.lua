@@ -5,8 +5,14 @@ local class = require('class')
 local ConnectState = require('enums').ConnectState
 local Events = require('const').Events
 
+---The node manager class for managing all audio sending server/node
+---@class NodeManager
+---@field lunalink Core The core class to get some useful infomation
+
 local NodeManager, get = class('NodeManager', Cache)
 
+---The main class for handling lavalink servers
+---@param lunalink Core
 function NodeManager:__init(lunalink)
   Cache.__init(self)
   self._lunalink = lunalink
@@ -16,6 +22,8 @@ function get:lunalink()
   return self._lunalink
 end
 
+---Add a new node
+---@param node Node
 function NodeManager:add(node)
   local new_node = Node(self._lunalink, node)
 	new_node:connect()
@@ -23,6 +31,9 @@ function NodeManager:add(node)
 	self:debug('Node $s added to manager!', node.name)
 end
 
+---Get a least used node.
+---@param custom_node_array 'array of [[Node]]'
+---@return Node
 function NodeManager:getLeastUsed(custom_node_array)
 	local nodes = custom_node_array and  custom_node_array or self:values()
 	local custom_resolver = self._lunalink._options.config.nodeResolver
@@ -48,10 +59,14 @@ function NodeManager:getLeastUsed(custom_node_array)
 	return temp[1].node
 end
 
+---Get all current nodes
+---@return 'a table of [[Node]]'
 function NodeManager:all()
 	return self:values()
 end
 
+---Remove a node.
+---@param name string
 function NodeManager:remove(name)
 	local node = self:get(name)
 	if node then
@@ -59,7 +74,6 @@ function NodeManager:remove(name)
 		self:delete(name)
 		self:debug('Node %s removed from manager!', node)
 	end
-	return self:values()
 end
 
 function NodeManager:_filter(t, func)

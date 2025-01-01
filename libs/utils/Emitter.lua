@@ -15,6 +15,7 @@ local setTimeout, clearTimeout = timer.setTimeout, timer.clearTimeout
 
 local Emitter = require('class')('Emitter')
 
+---Initial function for cache
 function Emitter:__init()
 	self._listeners = {}
 end

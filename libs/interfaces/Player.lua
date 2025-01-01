@@ -23,3 +23,15 @@
 ---@field pitch 'pitch' pitch filter
 ---@field rate 'rate' rate filter
 ---@field slow 'slow' slow filter
+
+---The voice channel options interface for creating player
+---@class VoiceChannelOptions
+---<!tag:properties>
+---@field guildId string Target guild identify
+---@field shardId string Target guild shard identify
+---@field voiceId string Target guild voice channel identify
+---@field textId string Target guild text channel identify 
+---@field volume number Target volume ammount
+---@field nodeName string Target node name
+---@field deaf boolean Whenever the bot is deaf
+---@field mute boolean Whenever the bot is mute

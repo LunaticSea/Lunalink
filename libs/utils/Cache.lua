@@ -3,8 +3,10 @@ local class = require('class')
 ---A key-based temporary database system that handles temporary data.
 ---@class Cache
 ---<!tag:interface>
+
 local Cache = class('Cache')
 
+---Initial function foc Cache
 function Cache:__init()
   self._cache = {}
 end

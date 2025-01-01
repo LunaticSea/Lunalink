@@ -2,6 +2,12 @@ local class = require('class')
 local json = require('json')
 local AllowedPackets = { 'VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE' }
 
+---The interface class to make a custom library for audio node
+---@class AbstractLibrary
+---<!tag:interface>
+---@field id string The bot ID
+---@field shardCount string The bot shardCount for some audio node
+
 local AbstractLibrary, get = class('AbstractLibrary')
 
 function AbstractLibrary:__init(client)
@@ -20,10 +26,16 @@ function AbstractLibrary:set(lunalink)
   self._lunalink = lunalink
 end
 
+---Listen attaches the event listener to the library you are using
+---@param nodes 'table of [[LunalinkNodeOptions]]'
 function AbstractLibrary:listen(nodes)
   error('Missing listen function')
 end
 
+---Where your library send packets to Discord Gateway
+---@param shardId number The current shard Id
+---@param payload any The payload data to request with discord gateway
+---@param important boolean If this payload important or not
 function AbstractLibrary:sendPacket(shardId, payload, important)
   error('Missing sendPacket function')
 end

@@ -17,9 +17,6 @@ local merge_default = require('utils/MergeDefault')
 ---The heart of Lunalink. Manage all package action
 ---@class Core: Emitter
 ---<!tag:interface>
-
-local Lunalink, get, set = class('Lunalink', Emitter)
-
 ---@field library AbstractLibrary Discord library connector
 ---@field nodes NodeManager Lavalink server that has been configured
 ---@field options LunalinkOptions Lunalink options, see get:default_options
@@ -32,6 +29,8 @@ local Lunalink, get, set = class('Lunalink', Emitter)
 ---@field shardCount number The current bott's shard count
 ---@field voices Cache All voice handler currently
 ---@field default_options LunalinkConfig the default configurations
+
+local Lunalink, get, set = class('Lunalink', Emitter)
 
 ---Initial function for Lunalink
 ---(you don't need to call this function only if you want to extend)

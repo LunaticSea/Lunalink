@@ -10,8 +10,22 @@ local Rest = require('node/Rest')
 local PlayerEvents = require('node/PlayerEvents')
 local LavalinkFour = require('drivers/LavalinkFour')
 
+---The node manager class for managing all audio sending server/node
+---@class Node
+---<!tag:interface>
+---@field lunalink Core Core class for getting some userful infomation
+---@field options LunalinkNodeOptions Raw node options from LunalinkOptions
+---@field rest Rest The lunalink rest manager
+---@field online boolean The voice server online status
+---@field state '[ConnectState](Enumerations.md#connectstate)' The lavalink server connect state
+---@field stats '[NodeStats](https://lavalink.dev/api/rest.html#get-lavalink-stats)' The lavalink server all status
+---@field driver AbstractDriver Driver for connect to current version of voice server
+
 local Node, get = class('Node')
 
+---Initial function for Node class
+---@param lunalink Code
+---@param options LunalinkNodeOptions
 function Node:__init(lunalink, options)
   self._lunalink = lunalink
   self._options = options
@@ -81,6 +95,8 @@ function get:driver()
   return self._driver
 end
 
+---Connect this lavalink server
+---@return AbstractDriver
 function Node:connect()
   self._driver:connect()
   return self._driver
@@ -141,7 +157,7 @@ function Node:wsCloseEvent(code, reason)
   ) then
     setTimeout(self._lunalink._options.config.retryTimeout)
     self.retryCounter = self.retryCounter + 1
-    self.reconnect(true)
+    self:reconnect(true)
     return
   end
   self:nodeClosed()
@@ -150,7 +166,7 @@ end
 function Node:_nodeClosed()
   self._lunalink:emit(Events.NodeClosed, self)
   self:debug('Node closed! URL: %s', self._driver._wsUrl)
-  self:clean()
+  self:clean(false)
 end
 
 function Node:_updateStatusData(data)
@@ -164,18 +180,23 @@ function Node:_updateStatusData(data)
   }
 end
 
+---Disconnect this lavalink server
 function Node:disconnect()
   self._sudoDisconnect = true
   self._driver:wsClose()
 end
 
+---Reconnect back to this lavalink server
+---@param noClean boolean
 function Node:reconnect(noClean)
-  if not noClean then self:clean() end
+  if not noClean then self:clean(false) end
   self:debug("Node is trying to reconnect! URL = %s", self._driver._wsUrl)
   self._lunalink:emit(Events.NodeReconnect, self)
   self.driver:connect()
 end
 
+---Clean all the lavalink server state and set to default value
+---@param online boolean
 function Node:clean(online)
   self._sudoDisconnect = false
   self._retryCounter = 0

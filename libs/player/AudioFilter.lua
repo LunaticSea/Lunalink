@@ -7,9 +7,9 @@ local PlayerState = require('enums').PlayerState
 ---The heart of Lunalink. Manage all package action
 ---@class AudioFilter
 ---<!tag:interface>
+---@field player Player A player class
 
 local AudioFilter, get = class('AudioFilter')
----@field player Player A player class
 
 ---Initial function for AudioFilter
 ---@param player Player

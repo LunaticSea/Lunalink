@@ -8,8 +8,14 @@ local Events = require('const').Events
 local VoiceState = enums.VoiceState
 local PlayerState = enums.PlayerState
 
+---The node manager class for managing all active players
+---@class PlayerManager
+---@field lunalink Core The core class to get some useful infomation
+
 local PlayerManager, get = class('PlayerManager', Cache)
 
+---The main class for handling lavalink players
+---@param lunalink Core
 function PlayerManager:__init(lunalink)
   Cache.__init(self)
   self._lunalink = lunalink
@@ -19,6 +25,9 @@ function get:lunalink()
   return self._lunalink
 end
 
+---Create a player
+---@param options VoiceChannelOptions
+---@return Player
 function PlayerManager:create(options)
   -- Check player exist
   local created_player = self:get(options.guildId)
@@ -78,8 +87,12 @@ function PlayerManager:create(options)
   player.state = PlayerState.CONNECTED
   self:debug('Player created at ' .. options.guildId)
   self._lunalink:emit(Events.PlayerCreate, player)
+
+  return player
 end
 
+---Destroy a player
+---@param guildId Target guild id
 function PlayerManager:destroy(guildId)
   local player = self:get(guildId)
   if player then player:destroy() end
