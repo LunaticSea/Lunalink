@@ -1,14 +1,15 @@
---- Some lunalink additional config option
---- @class LunalinkConfig
---- @field additionalDriver table Additional custom driver for rainlink (no need 'new' keyword when add). Example: `additionalDriver: Lavalink4`
---- @field retryTimeout number Timeout before trying to reconnect (ms)
---- @field retryCount number Number of times to try and reconnect to Lavalink before giving up
---- @field voiceConnectionTimeout number  The retry timeout for voice manager when dealing connection to discord voice server (ms)
---- @field defaultSearchEngine string The default search engine like default search from youtube, spotify,...
---- @field defaultVolume number The default volume when create a player
---- @field searchFallback SearchFallback Search track from youtube when track resolve failed
---- @field resume number Whether to resume a connection on disconnect to Lavalink (Server Side) (Note: DOES NOT RESUME WHEN THE LAVALINK SERVER DIES)
---- @field resumeTimeout number When the seasion is deleted from Lavalink. Use second (Server Side) (Note: DOES NOT RESUME WHEN THE LAVALINK SERVER DIES)
---- @field userAgent string User Agent to use when making requests to Lavalink
---- @field nodeResolver function Node Resolver to use if you want to customize it `function (nodes) end`
---- @field structures Structures Number of times to try and reconnect to Lavalink before giving up
+---Some lunalink additional config option
+---@class LunalinkConfig
+---<!tag:properties>
+---@field additionalDriver table Additional custom driver for rainlink (no need 'new' keyword when add). Example: `additionalDriver: Lavalink4`
+---@field retryTimeout number Timeout before trying to reconnect (ms)
+---@field retryCount number Number of times to try and reconnect to Lavalink before giving up
+---@field voiceConnectionTimeout number  The retry timeout for voice manager when dealing connection to discord voice server (ms)
+---@field defaultSearchEngine string The default search engine like default search from youtube, spotify,...
+---@field defaultVolume number The default volume when create a player
+---@field searchFallback SearchFallback Search track from youtube when track resolve failed
+---@field resume number Whether to resume a connection on disconnect to Lavalink (Server Side) (Note: DOES NOT RESUME WHEN THE LAVALINK SERVER DIES)
+---@field resumeTimeout number When the seasion is deleted from Lavalink. Use second (Server Side) (Note: DOES NOT RESUME WHEN THE LAVALINK SERVER DIES)
+---@field userAgent string User Agent to use when making requests to Lavalink
+---@field nodeResolver function Node Resolver to use if you want to customize it `function (nodes) end`
+---@field structures Structures Number of times to try and reconnect to Lavalink before giving up

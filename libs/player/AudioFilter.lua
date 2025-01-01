@@ -4,8 +4,15 @@ local FilterData = require('const').FilterData
 local Events = require('const').Events
 local PlayerState = require('enums').PlayerState
 
-local AudioFilter, get = class('AudioFilter')
+---The heart of Lunalink. Manage all package action
+---@class AudioFilter
+---<!tag:interface>
 
+local AudioFilter, get = class('AudioFilter')
+---@field player Player A player class
+
+---Initial function for AudioFilter
+---@param player Player
 function AudioFilter:__init(player)
   self._current = nil
   self._player = player
@@ -15,6 +22,9 @@ function get:current()
   return self._current
 end
 
+---Create a new player.
+---@param filter AudioFilterOptions
+---@return Player
 function AudioFilter:set(filter)
   self:_checkDestroyed()
 
@@ -42,6 +52,8 @@ function AudioFilter:set(filter)
   return self._player
 end
 
+---Clear all filter that avaliable.
+---@return Player
 function AudioFilter:clear()
   self:_checkDestroyed()
 
@@ -57,42 +69,72 @@ function AudioFilter:clear()
   return self._player
 end
 
+---Set filter volume (not global)
+---@param volume number
+---@return Player
 function AudioFilter:setVolume(volume)
   return self:setRaw({ volume = volume })
 end
 
+---Set equalizer in filter
+---@param equalizer 'array with { band = number, gain = number }'
+---@return Player
 function AudioFilter:setEqualizer(equalizer)
   return self:setRaw({ equalizer = equalizer })
 end
 
+---Set karaoke filter with extended options
+---@param karaoke '{ level = number, monoLevel = number, filterBand = number, filterWidth = number }'
+---@return Player
 function AudioFilter:setKaraoke(karaoke)
   return self:setRaw({ karaoke = karaoke or nil })
 end
 
+---Set timescale options
+---@param timescale '{ speed = number, pitch = number, rate = number }'
+---@return Player
 function AudioFilter:setTimescale(timescale)
   return self:setRaw({ karaoke = timescale or nil })
 end
 
+---Set tremolo options
+---@param tremolo '{ frequency = number, depth = number }'
+---@return Player
 function AudioFilter:setTremolo(tremolo)
   return self:setRaw({ tremolo = tremolo or nil })
 end
 
+---Set vibrato options
+---@param vibrato '{ frequency = number, depth = number }'
+---@return Player
 function AudioFilter:setVibrato(vibrato)
   return self:setRaw({ vibrato = vibrato or nil })
 end
 
-function AudioFilter:setRotation(vibrato)
-  return self:setRaw({ vibrato = vibrato or nil })
+---Set rotation options
+---@param rotation '{ rotationHz = number }'
+---@return Player
+function AudioFilter:setRotation(rotation)
+  return self:setRaw({ rotation = rotation or nil })
 end
 
+---Set tremolo options
+---@param distortion '[LavalinkDistortion](https://lavalink.dev/api/rest#rotation)'
+---@return Player
 function AudioFilter:setDistortion(distortion)
   return self:setRaw({ distortion = distortion or nil })
 end
 
+---Set channelMix options
+---@param channelMix '{ leftToLeft = number, leftToRight = number, rightToLeft = number, rightToRight = number, }'
+---@return Player
 function AudioFilter:setChannelMix(channelMix)
   return self:setRaw({ channelMix = channelMix or nil })
 end
 
+---Set lowPass options
+---@param lowPass '{ smoothing = number }'
+---@return Player
 function AudioFilter:setLowPass(lowPass)
   return self:setRaw({ lowPass = lowPass or nil })
 end

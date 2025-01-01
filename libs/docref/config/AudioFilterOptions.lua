@@ -1,0 +1,25 @@
+---Some lunalink additional config option
+---@class AudioFilterOptions
+---<!tag:properties>
+---@field clear 'clear' Clear all the filter
+---@field eightD 'eightD' eightD filter
+---@field speed 'speed' speed filter
+---@field karaoke 'karaoke' karaoke filter
+---@field nightcore 'nightcore' nightcore filter
+---@field pop 'pop' pop filter
+---@field vaporwave 'vaporwave' vaporwave filter
+---@field party 'party' party filter
+---@field earrape 'earrape' earrape filter
+---@field equalizer 'equalizer' equalizer filter
+---@field electronic 'electronic' electronic filter
+---@field radio 'radio' radio filter
+---@field tremolo 'tremolo' tremolo filter
+---@field treblebass 'treblebass' treblebass filter
+---@field vibrato 'vibrato' vibrato filter
+---@field china 'china' china filter
+---@field chimpunk 'darthvader' soft filter
+---@field daycore 'daycore' daycore filter
+---@field doubletime 'doubletime' doubletime filter
+---@field pitch 'pitch' pitch filter
+---@field rate 'rate' rate filter
+---@field slow 'slow' slow filter

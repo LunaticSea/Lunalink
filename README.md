@@ -50,6 +50,8 @@ Comming Soon
 | Creator                                              | Insipred Product                                         | Item                    |
 |------------------------------------------------------|----------------------------------------------------------|-------------------------|
 | [@cloudwithax](https://github.com/cloudwithax)       | [flare](https://github.com/cloudwithax/flare)            | Websocket Usage Example |
+| [@SinisterRectus](https://github.com/SinisterRectus) | [Discordia](https://github.com/SinisterRectus/Discordia) | Emmiter, enums          |
+| [@Bilal2453](https://github.com/Bilal2453)           | [luv-docgen](https://github.com/Bilal2453/luv-docgen)    | docgen                  |
 
 - **And everyone who contribute my project 💗**
 

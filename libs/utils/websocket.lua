@@ -3,20 +3,8 @@ local json = require('json')
 local websocket = require('coro-websocket')
 local Emitter = require('utils/Emitter')
 
---- Websocket headers interface
---- 
-
---- Options for modified of coro-websocket with event based
---- @class WebSocketOptions
---- @field url string The ws url
---- @field headers table A table of ws headers, example: `{'Foo', 'Bar'}`
-
---- Modified version of coro-websocket with event based
---- @class WebSocket: Emitter
---- <!tag:interface>
 local ws = class('Websocket', Emitter)
 
---- @param options WebSocketOptions Options for modified websocket
 function ws:__init(options)
 	Emitter.__init(self)
 	self._config = websocket.parseUrl(options.url)

@@ -1,3 +1,5 @@
+-- Get from https://github.com/SinisterRectus/Discordia/blob/master/libs/enums.lua
+
 local function enum(tbl)
 	local call = {}
 	for k, v in pairs(tbl) do

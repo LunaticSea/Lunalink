@@ -3,6 +3,7 @@ Apache License 2.0
 
 Copyright (c) 2016-2021 SinisterRectus (Original author)
 Copyright (c) 2021-2022 Bilal2453 (Heavily modified to partially support EmmyLua)
+Copyright (c) 2022-2024 RainyXeon (Class patches and props class)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -153,10 +154,19 @@ end
 local function matchParameters(c)
 	local ret = {}
 	for _, s in ipairs(c) do
-		local param_name, optional, param_type = s:match('@param%s*([^%s%?]+)%s*(%??)%s*(%S+)')
+		local param_name, optional, param_type = s:match("@param%s*([^%s%?]+)%s*(%??)'(.+)'")
+
+		if param_name then
+			ret[#ret+1] = {param_name, param_type, optional == '?'}
+			goto continue
+		end
+
+		param_name, optional, param_type = s:match('@param%s*([^%s%?]+)%s*(%??)%s*(%S+)')
+
 		if param_name then
 			ret[#ret+1] = {param_name, param_type, optional == '?'}
 		end
+	  ::continue::
 	end
 	if #ret > 0 then return ret end
 
@@ -405,7 +415,7 @@ for _, class in pairs(docs) do
 
 	f:write(class.desc, '\n\n')
 
-	checkTags(class.tags, {'interface', 'abstract', 'patch', 'enums'})
+	checkTags(class.tags, {'interface', 'abstract', 'patch', 'properties'})
 	if class.tags.interface then
 		writeHeading(f, 'Constructor')
 		f:write('### ', class.name)
@@ -414,8 +424,8 @@ for _, class in pairs(docs) do
 		f:write('*This is an abstract base class. Direct instances should never exist.*\n\n')
   elseif class.tags.patch then
     f:write("*This is a patched class.\nFor full usage refer to the Discordia Wiki, only patched methods and properities are documented here.*\n\n")
-  elseif class.tags.enums then
-    f:write("")
+  elseif class.tags.properties then
+    f:write("*This is a properties table, not class!*\n\n")
 	else
 		f:write('*Instances of this class should not be constructed by users.*\n\n')
 	end

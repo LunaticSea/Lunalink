@@ -14,25 +14,28 @@ local SourceIDs = require('const').SourceIDs
 local manifest = require('manifest')
 local merge_default = require('utils/MergeDefault')
 
---- The heart of Lunalink. Manage all package action
---- @class Core: Emitter
---- <!tag:interface>
---- @field library AbstractLibrary Discord library connector
---- @field nodes NodeManager Lavalink server that has been configured
---- @field options LunalinkOptions Lunalink options, see get:default_options
---- @field id string Bot id
---- @field players PlayerManager All currently running players
---- @field searchEngine Cache All search engines
---- @field searchPlugins Cache All search plugins (resolver plugins)
---- @field plugins Cache All plugins (include resolver plugins)
---- @field drivers AbstractDriver All avaliable lunalink drivers
---- @field shardCount number The current bott's shard count
---- @field voices Cache All voice handler currently
---- @field default_options LunalinkConfig the default configurations
+---The heart of Lunalink. Manage all package action
+---@class Core: Emitter
+---<!tag:interface>
 
 local Lunalink, get, set = class('Lunalink', Emitter)
 
---- @param options LunalinkOptions
+---@field library AbstractLibrary Discord library connector
+---@field nodes NodeManager Lavalink server that has been configured
+---@field options LunalinkOptions Lunalink options, see get:default_options
+---@field id string Bot id
+---@field players PlayerManager All currently running players
+---@field searchEngine Cache All search engines
+---@field searchPlugins Cache All search plugins (resolver plugins)
+---@field plugins Cache All plugins (include resolver plugins)
+---@field drivers AbstractDriver All avaliable lunalink drivers
+---@field shardCount number The current bott's shard count
+---@field voices Cache All voice handler currently
+---@field default_options LunalinkConfig the default configurations
+
+---Initial function for Lunalink
+---(you don't need to call this function only if you want to extend)
+---@param options LunalinkOptions
 function Lunalink:__init(options)
 	Emitter.__init(self)
   assert(options, 'Please include options to run this library')
@@ -135,24 +138,24 @@ function get:manifest()
   return self._manifest
 end
 
---- Create a new player.
---- @param options VoiceChannelOptions Options for creating player
---- @return Player
+---Create a new player.
+---@param options VoiceChannelOptions
+---@return Player
 function Lunalink:create(options)
 	return self._players:create(options)
 end
 
---- Destroy a specific player.
---- @param guild_id string Target guild id
---- @return nil
+---Destroy a specific player.
+---@param guild_id string
+---@return nil
 function Lunalink:destroy(guild_id)
 	self._players:destroy(guild_id)
 end
 
---- Search a specific track.
---- @param query string Target guild id
---- @param options SearchOptions Some options when search
---- @return nil
+---Search a specific track.
+---@param query string
+---@param options SearchOptions
+---@return nil
 function Lunalink:search(query, options)
 	-- Will do later
 end
