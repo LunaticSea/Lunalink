@@ -77,6 +77,7 @@ function Queue:add(track)
     assert(not full_check, 'Track must be an instance of LunalinkTrack')
   else
     assert(track.__name == 'LunalinkTrack', 'Track must be an instance of LunalinkTrack')
+    ---@diagnostic disable-next-line: missing-fields
     track = { track }
   end
 
