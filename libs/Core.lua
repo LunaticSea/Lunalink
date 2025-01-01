@@ -3,6 +3,7 @@ local Cache = require('utils/Cache')
 local NodeManager = require('manager/NodeManager')
 local PlayerManager = require('manager/PlayerManager')
 local Emitter = require('utils/Emitter')
+local Track = require('player/Track')
 
 -- Drivers
 local LavalinkFour = require('drivers/LavalinkFour')
@@ -11,8 +12,11 @@ local LavalinkFour = require('drivers/LavalinkFour')
 local class = require('class')
 local enums = require('enums')
 local SourceIDs = require('const').SourceIDs
+local Events = require('const').Events
 local manifest = require('manifest')
 local merge_default = require('utils/MergeDefault')
+local LavalinkLoadType = enums.LavalinkLoadType
+local SearchResultType = enums.SearchResultType
 
 ---The heart of Lunalink. Manage all package action
 ---@class Core: Emitter
@@ -154,9 +158,110 @@ end
 ---Search a specific track.
 ---@param query string
 ---@param options SearchOptions
----@return nil
+---@return SearchResult
 function Lunalink:search(query, options)
-	-- Will do later
+	local node_name = options and options.node_name and options.node_name or nil
+	local node = self._nodes:getLeastUsed()
+
+	if options and options.node_name and node_name then
+		local get_exist_target_node = self._nodes:get(node_name)
+		if get_exist_target_node then node = get_exist_target_node end
+	end
+
+	assert(node, 'No node is available')
+
+	local pluginData = nil
+
+	local directSearchPattern = 'directSearch=(.+)'
+	local isDirectSearch = string.match(query, directSearchPattern)
+	local isUrl = string.match(query, '^(https?://[%w-%.]+(%:[0-9]+)?)')
+
+	local pluginSearch = self._searchPlugins:get(options.engine or nil)
+	if (
+		options and
+		options.engine and
+		options.engine ~= nil and
+		pluginSearch and
+		isDirectSearch == nil
+	) then
+		pluginData = pluginSearch:searchDirect(query, options)
+		if (pluginData.tracks.length ~= 0) then
+			return pluginData
+		end
+	end
+
+	local source =
+		(options and options.engine)
+			and self._searchEngines:get(options.engine)
+			or self._searchEngines:get(
+				self._options.config.defaultSearchEngine or 'youtube'
+			)
+
+	local finalQuery =
+		isDirectSearch ~= nil and isDirectSearch[2] or (not isUrl
+		and  string.format('%ssearch:%s', source, query)
+		or query)
+
+	local result = node.rest.resolver(finalQuery)
+	if not result or result.loadType == LavalinkLoadType.EMPTY then
+		return self:buildSearch(nil, {}, SearchResultType.SEARCH)
+	end
+
+	local loadType
+	local normalizedData = {
+		playlistName = SearchResultType.SEARCH,
+		tracks = {},
+	}
+
+	if result.loadType == LavalinkLoadType.TRACK then
+		loadType = SearchResultType.TRACK
+		normalizedData.tracks = {result.data}
+	end
+
+	if result.loadType == LavalinkLoadType.PLAYLIST then
+		loadType = SearchResultType.PLAYLIST
+		normalizedData = {
+			playlistName = result.data.info.name,
+			tracks = result.data.tracks,
+		}
+	end
+
+	if result.loadType == LavalinkLoadType.SEARCH then
+		loadType = SearchResultType.SEARCH
+		normalizedData.tracks = result.data
+	end
+
+	self:emit(
+		Events.Debug,
+		string.format(
+			'[Rainlink] / [Search] | Searched %s; Track results: %s',
+			query, #normalizedData.tracks
+		)
+	)
+
+	return self:buildSearch(
+		normalizedData.playlistName or nil,
+		self:_map(normalizedData.tracks, function (track)
+			return Track(
+				track,
+				(options and options.requester) and options.requester or nil,
+				node.driver.id
+			)
+		end),
+		loadType
+	)
+end
+
+function Lunalink:buildSearch(
+	playlistName,
+	tracks,
+	type
+)
+	return {
+		playlistName = playlistName,
+		tracks = tracks,
+		type = type or SearchResultType.SEARCH,
+	}
 end
 
 function Lunalink:_initialSearchEngines()
@@ -193,6 +298,14 @@ end
 
 function set:id(data)
 	self._id = data
+end
+
+function Lunalink:_map(tbl, func)
+	local result = {}
+	for i, v in ipairs(tbl) do
+			result[i] = func(v, i, tbl)
+	end
+	return result
 end
 
 return Lunalink

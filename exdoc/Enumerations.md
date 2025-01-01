@@ -57,6 +57,13 @@ These enums only use in Lunalink and cannot be used in another lavalink wrapper
 |Disconnected|1|
 |Closed|2|
 
+## SearchResultType
+|Name|Value|
+|-|-|
+|TRACK|TRACK|
+|PLAYLIST|PLAYLIST|
+|SEARCH|SEARCH|
+
 # Lavalink Enumerations
 
 These enums avaliable in lavalink v4 version. They are not necessarily unique to Lunalink.

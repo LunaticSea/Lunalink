@@ -81,4 +81,10 @@ enums.LavalinkLoadType {
   ERROR = 'error',
 }
 
+enums.SearchResultType {
+  TRACK = 'TRACK',
+  PLAYLIST = 'PLAYLIST',
+  SEARCH = 'SEARCH',
+}
+
 return enums

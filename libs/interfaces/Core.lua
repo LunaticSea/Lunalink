@@ -1,0 +1,6 @@
+---The rainlink search function result interface
+---@class SearchResult
+---<!tag:properties>
+---@field type SearchResultType The type of search results
+---@field playlistName 'string/nil' The name of playlist
+---@field tracks 'Table<[[Track]]>' A list of resoolved tracks
