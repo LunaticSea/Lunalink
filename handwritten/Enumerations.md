@@ -64,6 +64,13 @@ These enums only use in Lunalink and cannot be used in another lavalink wrapper
 |PLAYLIST|PLAYLIST|
 |SEARCH|SEARCH|
 
+## LoopMode
+|Name|Value|
+|-|-|
+|SONG|song|
+|QUEUE|queue|
+|NONE|none|
+
 # Lavalink Enumerations
 
 These enums avaliable in lavalink v4 version. They are not necessarily unique to Lunalink.

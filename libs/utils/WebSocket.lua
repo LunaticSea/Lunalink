@@ -3,7 +3,7 @@ local json = require('json')
 local websocket = require('coro-websocket')
 local Emitter = require('utils/Emitter')
 
-local WebSocket, get = class('WebSocket', Emitter)
+local WebSocket = class('WebSocket', Emitter)
 
 ---WebSocketOptions interface
 ---@class WebSocketOptions
