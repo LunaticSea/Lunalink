@@ -29,7 +29,7 @@ function LavalinkFour:__init(lunalink, node)
     node._options.host,
     node._options.port,
     ''
-  )
+  ):sub(1, -2)
   self._sessionId = ''
   self._playerFunctions = Functions()
   self._functions = Functions()
@@ -133,17 +133,17 @@ function LavalinkFour:requester(options)
 
   local res, res_body_string = http.request(req_method, url, lavalink_headers, req_body)
 
-  if res.status == 204 then
+  if res.code == 204 then
     self:debug("%s %s %s", req_method, url, req_body)
     return nil
   end
 
-  if res.status ~= 200 then
+  if res.code ~= 200 then
     self:debug("%s %s %s", req_method, url, req_body)
     self:debug(
       'Something went wrong with lavalink server. '
       .. 'Status code: %s\n Headers: %s',
-      res.status, json.encode(options.headers)
+      res.code, json.encode(options.headers)
     )
     return nil
   end
