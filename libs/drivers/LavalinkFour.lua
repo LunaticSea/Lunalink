@@ -34,8 +34,6 @@ function LavalinkFour:__init(lunalink, node)
   self._playerFunctions = Functions()
   self._functions = Functions()
   self._wsClient = nil
-  self._ws_res = nil
-  self._ws_read = nil
 end
 
 function get:id()
@@ -107,7 +105,11 @@ function LavalinkFour:connect()
 
   self._wsClient:on('close', function (code, reason)
     self._node:wsCloseEvent(code, reason)
-    self._wsClient:cleanEvents()
+  end)
+
+  self._wsClient:on('error', function (err)
+    self._node:wsErrorEvent(err)
+    self._wsClient = nil
   end)
 
   self._wsClient:connect()

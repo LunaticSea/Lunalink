@@ -3,40 +3,57 @@ local json = require('json')
 local websocket = require('coro-websocket')
 local Emitter = require('utils/Emitter')
 
-local ws = class('Websocket', Emitter)
+local WebSocket, get = class('WebSocket', Emitter)
 
-function ws:__init(options)
+---WebSocketOptions interface
+---@class WebSocketOptions
+---@field url string The websocket url
+---@field headers '[Headers](https://bilal2453.github.io/coro-docs/docs/coro-websocket.html#headers)' Array of websocket headers
+
+---Modified coro-websocket client based on event system
+---@class WebSocket
+---<!tag:interface>
+
+---Initial class for WebSocket class
+---@param options WebSocketOptions
+function WebSocket:__init(options)
 	Emitter.__init(self)
 	self._config = websocket.parseUrl(options.url)
 	self._config.headers = options.headers
 	self._url = options.url
-	self._ws = websocket
   self._ws_read = nil
 	self._ws_write = nil
 	self._close_event_sent = false
 end
 
-function ws:connect()
-	local res, ws_read, ws_write = self._ws.connect(self._config)
+---Connect to the websocket
+---@return boolean
+function WebSocket:connect()
+	local res, ws_read, ws_write = websocket.connect(self._config)
 
 	if res and res.code == 101 then
 		self._ws_write, self._ws_read = ws_write, ws_read
 		coroutine.wrap(self._listen_msg)(self)
-		self:emit('open',  self)
+		self:emit('open', self)
 		return true
 	else
 		self:emit('close', 1006, 'Host not found')
+		return false
 	end
 end
 
-function ws:_listen_msg()
+function WebSocket:_listen_msg()
 	for data in self._ws_read do
 		if data.payload == '\003\233' then
 			self:emit('close', 1006, 'Host disconnected')
+			return
+		elseif not data.payload then
+			self:emit('error', data.error)
+		else
+			local json_data = json.decode(data.payload)
+			data.json_payload = json_data
+			self:emit('message', data)
 		end
-		local json_data = json.decode(data.payload)
-		data.json_payload = json_data
-		self:emit('message', data)
 	end
 	if not self._close_event_sent then
 		self:emit('close', 1006, 'Host disconnected')
@@ -44,7 +61,10 @@ function ws:_listen_msg()
 	end
 end
 
-function ws:close(code, reason)
+---Close the websocket connection
+---@param code number
+---@param reason string
+function WebSocket:close(code, reason)
 	code = code or 1000
 	reason = reason or 'Self closed'
 	self._close_event_sent = true
@@ -64,7 +84,10 @@ function ws:close(code, reason)
 	self._ws_write = nil
 end
 
-function ws:send(payload)
+---Send message to websocket
+---@param payload string
+---@return boolean
+function WebSocket:send(payload)
 	if type(payload) ~= "string" then
 		payload = json.encode(payload)
 	end
@@ -82,11 +105,11 @@ function ws:send(payload)
 	return true
 end
 
-
-function ws:cleanEvents()
+---Clean all events
+function WebSocket:cleanEvents()
 	self:removeAllListeners('close')
 	self:removeAllListeners('open')
 	self:removeAllListeners('message')
 end
 
-return  ws
+return WebSocket

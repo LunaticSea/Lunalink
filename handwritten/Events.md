@@ -16,7 +16,7 @@ lunalink:on('nodeConnect', function()
 end)
 ```
 
-This event would print 'Node connected' then a node is connected by lunalink
+This event would print 'Node connected' when a node is connected by lunalink
 
 # Node Events
 
@@ -37,6 +37,11 @@ Emitted after a node is closed after numberous of reconnect tries to it's voice 
 ## nodeReconnect
 Emitted after a node is reconnected to it's voice server
 - `node` - [[Node]]
+
+## nodeError
+Emitted after a node is reconnected to it's voice server
+- `node` - [[Node]]
+- `message` - Error message in string
 
 # Player Events
 

@@ -24,6 +24,7 @@ return {
   Cache = require('utils/Cache'),
   Emitter = require('utils/Emitter'),
   Functions = require('utils/Functions'),
+  WebSocket = require('utils/WebSocket'),
   -- Export miscs
   constants = require('const'),
   enums = require('enums'),

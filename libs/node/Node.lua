@@ -1,5 +1,5 @@
 local class = require('class')
-local setTimeout = require('timer').setTimeout
+local timer = require('timer')
 local Events = require('const').Events
 local enums = require('enums')
 
@@ -29,6 +29,7 @@ local Node, get = class('Node')
 function Node:__init(lunalink, options)
   self._lunalink = lunalink
   self._options = options
+  self._retryCounter = 0
 
   local get_driver = self:_filter(self._lunalink._drivers, function (driver)
     return driver.__getters:id() == options.driver
@@ -146,6 +147,11 @@ function Node:wsMessageEvent(data)
   end
 end
 
+function Node:wsErrorEvent(logs)
+  self:debug("Node errored! URL: %s", self._driver.wsUrl)
+  self._lunalink:emit(Events.NodeError, self, logs)
+end
+
 function Node:wsCloseEvent(code, reason)
   self._online = false
   self._state = ConnectState.Disconnected
@@ -155,15 +161,15 @@ function Node:wsCloseEvent(code, reason)
     not self._sudoDisconnect and
     self._retryCounter ~= self._lunalink._options.config.retryCount
   ) then
-    setTimeout(self._lunalink._options.config.retryTimeout)
-    self.retryCounter = self.retryCounter + 1
+    timer.sleep(self._lunalink._options.config.retryTimeout)
+    self._retryCounter = self._retryCounter + 1
     self:reconnect(true)
     return
   end
   self:nodeClosed()
 end
 
-function Node:_nodeClosed()
+function Node:nodeClosed()
   self._lunalink:emit(Events.NodeClosed, self)
   self:debug('Node closed! URL: %s', self._driver._wsUrl)
   self:clean(false)
@@ -183,7 +189,7 @@ end
 ---Disconnect this lavalink server
 function Node:disconnect()
   self._sudoDisconnect = true
-  self._driver:wsClose()
+  self:connect()
 end
 
 ---Reconnect back to this lavalink server
@@ -192,7 +198,7 @@ function Node:reconnect(noClean)
   if not noClean then self:clean(false) end
   self:debug("Node is trying to reconnect! URL = %s", self._driver._wsUrl)
   self._lunalink:emit(Events.NodeReconnect, self)
-  self.driver:connect()
+  self._driver:connect()
 end
 
 ---Clean all the lavalink server state and set to default value

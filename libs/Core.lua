@@ -19,6 +19,8 @@ local LavalinkLoadType = enums.LavalinkLoadType
 local SearchResultType = enums.SearchResultType
 
 ---The heart of Lunalink. Manage all package action
+---Read [[Events]] to know more about event system
+---Read [[Enumerations]] to know which enum are used for this project
 ---@class Core: Emitter
 ---<!tag:interface>
 ---@field library AbstractLibrary Discord library connector
@@ -46,7 +48,7 @@ function Lunalink:__init(options)
 	self._options = options
 	self._drivers = { LavalinkFour }
   self._library = options.library:set(self)
-	self._options.config = merge_default(self._options.config, self.default_options)
+	self._options.config = merge_default(self.default_options, self._options.config)
 	if (
 		self._options.config.additionalDriver and
 		#self._options.config.additionalDriver ~= 0
