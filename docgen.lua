@@ -467,8 +467,8 @@ for _, class in pairs(docs) do
 
 end
 
-for f in coroutine.wrap(scan), './exdoc' do
-	local new_dir = 'docs/' .. string.match(f, 'exdoc/(.*)')
+for f in coroutine.wrap(scan), './handwritten' do
+	local new_dir = 'docs/' .. string.match(f, 'handwritten/(.*)')
 	local d = assert(fs.readFileSync(f))
 	fs.writeFileSync(new_dir, d)
 end
