@@ -28,7 +28,7 @@ function NodeManager:add(node)
   local new_node = Node(self._lunalink, node)
 	new_node:connect()
 	self:set(node.name, new_node)
-	self:debug('Node $s added to manager!', node.name)
+	self:debug('Node %s added to manager!', node.name)
 end
 
 ---Get a least used node.

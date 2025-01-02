@@ -34,37 +34,37 @@ end
 
 local enums = {enum = enum}
 
-enums.PluginType {
+enums.PluginType = enum {
   Default = 'default',
   SourceResolver = 'sourceResolver',
 }
 
-enums.PlayerState {
+enums.PlayerState = enum {
   CONNECTED = 0,
   DISCONNECTED = 1,
   DESTROYED = 2,
 }
 
-enums.LoopMode {
+enums.LoopMode = enum {
   SONG = 'song',
   QUEUE = 'queue',
   NONE = 'none',
 }
 
-enums.ConnectState {
+enums.ConnectState = enum {
   Connected = 0,
   Disconnected = 1,
   Closed = 2,
 }
 
-enums.VoiceState {
+enums.VoiceState = enum {
   SESSION_READY = 0,
   SESSION_ID_MISSING = 1,
   SESSION_ENDPOINT_MISSING = 2,
   SESSION_FAILED_UPDATE = 3,
 }
 
-enums.VoiceConnectState {
+enums.VoiceConnectState = enum {
   CONNECTING = 0,
   NEARLY = 1,
   CONNECTED = 2,
@@ -73,7 +73,7 @@ enums.VoiceConnectState {
   DISCONNECTED = 5,
 }
 
-enums.LavalinkLoadType {
+enums.LavalinkLoadType = enum {
   TRACK = 'track',
   PLAYLIST = 'playlist',
   SEARCH = 'search',
@@ -81,10 +81,25 @@ enums.LavalinkLoadType {
   ERROR = 'error',
 }
 
-enums.SearchResultType {
+enums.SearchResultType = enum {
   TRACK = 'TRACK',
   PLAYLIST = 'PLAYLIST',
   SEARCH = 'SEARCH',
 }
+enums.LavalinkEventsEnum = enum {
+  Ready = 'ready',
+  Status = 'stats',
+  Event = 'event',
+  PlayerUpdate = 'playerUpdate',
+}
+
+enums.LavalinkPlayerEventsEnum = enum {
+  TrackStartEvent = 'TrackStartEvent',
+  TrackEndEvent = 'TrackEndEvent',
+  TrackExceptionEvent = 'TrackExceptionEvent',
+  TrackStuckEvent = 'TrackStuckEvent',
+  WebSocketClosedEvent = 'WebSocketClosedEvent',
+}
+
 
 return enums

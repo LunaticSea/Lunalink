@@ -40,3 +40,9 @@ luac.out
 *.hex
 
 docs
+
+bot.lua
+
+discordia.log
+
+gateway.json

@@ -43,9 +43,9 @@ function Lunalink:__init(options)
 	Emitter.__init(self)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
+	self._options = options
 	self._drivers = { LavalinkFour }
   self._library = options.library:set(self)
-  self._options = options
 	self._options.config = merge_default(self._options.config, self.default_options)
 	if (
 		self._options.config.additionalDriver and
@@ -56,15 +56,15 @@ function Lunalink:__init(options)
 		end
 	end
 	-- Node manager
-	self._nodes = NodeManager()
+	self._nodes = NodeManager(self)
 	-- Player manager
-	self._players = PlayerManager()
+	self._players = PlayerManager(self)
   self._id = nil
   self._searchEngines = Cache()
   self._searchPlugins = Cache()
   self._plugins = Cache()
   self._shardCount = 1
-  self.voices = Cache()
+  self._voices = Cache()
   self._manifest = manifest
 	self:_initialSearchEngines()
 	if (

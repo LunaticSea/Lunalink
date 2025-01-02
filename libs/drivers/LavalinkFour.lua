@@ -21,7 +21,7 @@ function LavalinkFour:__init(lunalink, node)
     self._proto_list.ws,
     node._options.host,
     node._options.port,
-    '/websocket'
+    'websocket'
   )
   self._httpUrl = string.format(
     self._base_url_form,
@@ -97,18 +97,20 @@ function LavalinkFour:connect()
     headers = headers
   })
 
-  self._wsClient:on('open', function (res)
-    self._node:wsMessageEvent(res.json_payload)
+  self._wsClient:on('open', function ()
+    self._node:wsOpenEvent()
   end)
 
-  self._wsClient:on('message', function ()
-    self._node:wsOpenEvent()
+  self._wsClient:on('message', function (data)
+    self._node:wsMessageEvent(data.json_payload)
   end)
 
   self._wsClient:on('close', function (code, reason)
     self._node:wsCloseEvent(code, reason)
     self._wsClient:cleanEvents()
   end)
+
+  self._wsClient:connect()
 end
 
 function LavalinkFour:requester(options)

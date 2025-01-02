@@ -30,7 +30,7 @@ function Node:__init(lunalink, options)
   self._lunalink = lunalink
   self._options = options
 
-  local get_driver =  self:_filter(self._lunalink._drivers, function (driver)
+  local get_driver = self:_filter(self._lunalink._drivers, function (driver)
     return driver.__getters:id() == options.driver
   end)
 
@@ -113,7 +113,7 @@ function Node:wsMessageEvent(data)
   if data.op == LavalinkEventsEnum.Ready then
     local is_resume = self._lunalink._options.config.resume
     local timeout = self._lunalink._options.config.resumeTimeout
-    self._driver.sessionId = data.sessionId
+    self._driver._sessionId = data.sessionId
 
     if is_resume and timeout then
       self._driver:updateSession(data.sessionId, is_resume, timeout)

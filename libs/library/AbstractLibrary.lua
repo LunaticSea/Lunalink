@@ -24,6 +24,7 @@ end
 
 function AbstractLibrary:set(lunalink)
   self._lunalink = lunalink
+  return self
 end
 
 ---Listen attaches the event listener to the library you are using

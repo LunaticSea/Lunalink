@@ -1,4 +1,4 @@
-local AbstractLibrary = require('AbstractLibrary')
+local AbstractLibrary = require('library/AbstractLibrary')
 
 local class = require('class')
 
@@ -21,8 +21,8 @@ function Discordia:sendPacket(shardId, OP_CODE, payload)
   self._client._shards[shardId]:_send(OP_CODE, payload)
 end
 
-function Discordia:listen()
-  self._client:once('ready', function () return self:_ready() end)
+function Discordia:listen(nodes)
+  self._client:once('ready', function () return self:_ready(nodes) end)
   self._client:on('raw', function (packet) self:_raw(packet) end)
 end
 
