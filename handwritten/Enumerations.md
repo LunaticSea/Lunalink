@@ -77,6 +77,24 @@ These enums avaliable in lavalink v4 version. They are not necessarily unique to
 |EMPTY|empty|
 |ERROR|error|
 
+## LavalinkEventsEnum
+|Name|Value|
+|-|-|
+|Ready|ready|
+|Status|stats|
+|Event|search|
+|PlayerUpdate|event|
+|ERROR|playerUpdate|
+
+## LavalinkPlayerEventsEnum
+|Name|Value|
+|-|-|
+|TrackStartEvent|TrackStartEvent|
+|TrackEndEvent|TrackEndEvent|
+|TrackExceptionEvent|TrackExceptionEvent|
+|TrackStuckEvent|TrackStuckEvent|
+|WebSocketClosedEvent|WebSocketClosedEvent|
+
 # Discord Enumerations
 
 The enumerations are designed to be compatible with the Discord API. They are not necessarily unique to Lunalink.
