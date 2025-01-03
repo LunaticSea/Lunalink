@@ -35,9 +35,7 @@ This is the list of all rainlink driver currently supported (codename is made up
 | Driver Name | Voice Server                                          | Language   | Supported Version | Notes                                                             |
 |-------------|-------------------------------------------------------|------------|-------------------|-------------------------------------------------------------------| 
 | koinu       | [Lavalink](https://github.com/lavalink-devs/Lavalink) | Java       | v4.0.0 - v4.x.x   |                                                                   |
-| koto        | [Lavalink](https://github.com/lavalink-devs/Lavalink) | Java       | v3.0.0 - v3.7.x   | `filter` and `resume` in lavalink below v3.4 not supported        |
 | nari        | [Nodelink](https://github.com/PerformanC/NodeLink)    | Javascript | v2.0.0 - v2.x.x   | Some `filter` mode in nodelink not supported                      |
-| miku        | [FrequenC](https://github.com/PerformanC/FrequenC)    | C          | IN TESTING        | This driver is in testing so don't use it or you will have errors |
 
 # 💾 Example bot:
 
