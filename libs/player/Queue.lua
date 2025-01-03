@@ -163,4 +163,10 @@ function Queue:_shift(tbl)
   return first
 end
 
+function Queue:_splice(t, index, count)
+  for i = 1, count do
+    table.remove(t, index)
+  end
+end
+
 return Queue

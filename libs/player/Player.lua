@@ -4,8 +4,10 @@ local Cache = require('utils/Cache')
 local AudioFilter = require('player/AudioFilter')
 local Functions = require('utils/Functions')
 local enums = require('enums')
+local Events = require('const').Events
 local LoopMode = enums.LoopMode
 local PlayerState = enums.PlayerState
+local VoiceConnectState = enums.VoiceConnectState
 
 ---A class for managing player action.
 ---@class Player
@@ -39,9 +41,10 @@ local Player, get = class('Player')
 ---@param voice Voice
 ---@param node Node
 function Player:__init(lunalink, voice, node)
+  self._sudoDestroy = false
   self._voice = voice
   self._lunalink = lunalink
-  local lunalink_config = self._manager.options.config
+  local lunalink_config = self._lunalink.options.config
   self._guildId = voice.guildId
   self._voiceId = voice.voiceId
   self._shardId = voice.shardId
@@ -154,5 +157,194 @@ end
 function get:voice()
   return self._voice
 end
+
+---Sends server update to lavalink
+function Player:sendServerUpdate()
+  local playerUpdate = {
+    guildId = self._guildId,
+    playerOptions = {
+      voice = {
+        token = self._voice.serverUpdate.token,
+        endpoint = self._voice.serverUpdate.endpoint,
+        sessionId = self._voice.sessionId,
+      },
+    },
+  }
+  self._node.rest:updatePlayer(playerUpdate)
+end
+
+---Destroy the player
+function Player:destroy()
+  self:checkDestroyed()
+  self._sudoDestroy = true
+  if self._playing then
+    self._node.rest:updatePlayer({
+      guildId = self._guildId,
+      playerOptions = {
+        track = {
+          encoded = nil,
+          length = 0,
+        },
+      },
+    })
+  end
+  self:clear(false)
+  self:disconnect()
+  self._node.rest:destroyPlayer(self._guildId)
+  self._lunalink.players:delete(self._guildId)
+  self._state = PlayerState.DESTROYED
+  self:debug('Player destroyed')
+  self._voiceId = ''
+  self._lunalink:emit(Events.PlayerDestroy, self)
+  self._sudoDestroy = false
+end
+
+---Disconnect from the voice channel
+---@return Player
+function Player:disconnect()
+  self:checkDestroyed()
+  if self._voice.state == VoiceConnectState.DISCONNECTED then return self end
+  self._voiceId = nil
+  self._deaf = false
+  self._mute = false
+  self._voice:disconnect()
+  self:pause()
+  self._state = PlayerState.DISCONNECTED
+  self:debug('Player disconnected')
+  return self
+end
+
+---Set the loop mode of the track
+---@param mode '[LoopMode](Enumerations.md#loopmode)'
+---@return Player
+function Player:setLoop(mode)
+  self:checkDestroyed()
+  self._loop = mode
+  return self
+end
+
+---Search track directly from player
+---@param query string
+---@param options SearchOptions
+---@return SearchResult
+function Player:search(query, options)
+  options = options and options or {}
+  local additional = {
+    nodeName = self._node.options.name
+  }
+  for _,v in ipairs(additional) do
+    table.insert(options, v)
+  end
+  return self._lunalink:search(query, options)
+end
+
+---Pause the track
+---@return Player
+function Player:pause()
+  self:checkDestroyed()
+  if self._paused == true then return self end
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      paused = true,
+    },
+  })
+  self._paused = true
+  self._playing = false
+  self._lunalink:emit(Events.PlayerPause, self, self._queue.current)
+  return self
+end
+
+---Resume the track
+---@return Player
+function Player:resume()
+  self:checkDestroyed()
+  if self._paused == false then return self end
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      paused = false,
+    },
+  })
+  self._paused = false
+  self._playing = true
+  self._lunalink:emit(Events.PlayerResume, self, self._queue.current)
+  return self
+end
+
+
+function Player:setPause(mode)
+  self:checkDestroyed()
+  if self._paused == mode then return self end
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      paused = mode,
+    },
+  })
+  self._paused = mode
+  self._playing = not mode
+  self._lunalink:emit(mode and Events.PlayerPause or Events.PlayerResume, self, self._queue.current)
+  return self
+end
+
+---Play the previous track
+---@return Player
+function Player:previous()
+  self:checkDestroyed()
+  local prevoiusData = self._queue.previous
+  local current = self._queue.current
+  local index = prevoiusData.length
+  if index == 0 and not current then return self end
+  self:play(prevoiusData[index])
+  self._queue.previous:_splice(index, 1)
+  return self
+end
+
+---Skip the current track
+---@return Player
+function Player:skip()
+  self:checkDestroyed()
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      track = {
+        encoded = nil,
+      },
+    },
+  })
+  return self
+end
+
+---Reset all data to default
+---@param emitEmpty boolean
+function Player:clean(emitEmpty)
+  self._loop = LoopMode.NONE
+  self._queue:clear()
+  self._queue.current = nil
+  self._queue.previous.length = 0
+  self._volume = self._lunalink.options.config.defaultVolume or 100
+  self._paused = true
+  self._playing = false
+  self._track = nil
+  self._data:clear()
+  self._position = 0
+  if emitEmpty then self._lunalink:emit(Events.QueueEmpty, self, self._queue) end
+end
+
+function Player:checkDestroyed()
+  assert(self._player._state ~= PlayerState.DESTROYED, 'Player is destroyed')
+end
+
+function Player:debug(logs, ...)
+	local pre_res = string.format(logs, ...)
+	local res = string.format(
+    '[Lunalink] / [Player @ %s] | %s',
+    self._player._guildId,
+    pre_res
+  )
+	self._player._lunalink:emit(Events.Debug, res)
+end
+
 
 return Player
