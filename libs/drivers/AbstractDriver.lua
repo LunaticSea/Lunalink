@@ -51,21 +51,25 @@ function get:node()
 end
 
 ---A function to connect to current node
+---@return nil
 function AbstractDriver:connect()
   error('driver function: connect missing')
 end
 
 ---A http requester for REST api
+---@return nil
 function AbstractDriver:requester()
   error('driver function: requester missing')
 end
 
 ---A function to close connection to current node
+---@return nil
 function AbstractDriver:wsClose()
   error('driver function: wsClose missing')
 end
 
 ---A function to update a new session
+---@return nil
 function AbstractDriver:updateSession()
   error('driver function: updateSession missing')
 end

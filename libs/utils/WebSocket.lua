@@ -106,6 +106,7 @@ function WebSocket:send(payload)
 end
 
 ---Clean all events
+---@return nil
 function WebSocket:cleanEvents()
 	self:removeAllListeners('close')
 	self:removeAllListeners('open')

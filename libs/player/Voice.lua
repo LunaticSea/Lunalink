@@ -121,6 +121,7 @@ function Voice:connect()
 end
 
 ---Send voice data to discord
+---@return nil
 function Voice:sendVoiceUpdate()
   self:sendDiscord({
     guild_id = self._guildId,
@@ -183,6 +184,7 @@ function Voice:setStateUpdate(data)
 end
 
 ---Disconnect from the voice channel
+---@return nil
 function Voice:disconnect()
   self.voiceId = nil
   self.deaf = false

@@ -187,6 +187,7 @@ function Node:_updateStatusData(data)
 end
 
 ---Disconnect this lavalink server
+---@return nil
 function Node:disconnect()
   self._sudoDisconnect = true
   self:connect()
