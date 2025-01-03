@@ -316,6 +316,86 @@ function Player:skip()
   return self
 end
 
+---Seek to another position in track
+---@param position number
+---@return Player
+function Player:seek(position)
+  self:checkDestroyed()
+  assert(self._queue.current, 'Player has no current track in it\'s queue')
+  assert(self._queue.current.isSeekable, 'The current track isn\'t seekable')
+
+  position = tonumber(position) or 0
+
+  assert(type(position) == "number", 'position must be a number')
+
+  if position < 0 or position > (self._queue.current.duration or 0) then
+    position = math.max(math.min(position, self._queue.current.duration or 0), 0)
+  end
+
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      position = position,
+    },
+  })
+  self._queue.current._position = position
+  return self
+end
+
+---Set another volume in player
+---@param volume number
+---@return Player
+function Player:setVolume(volume)
+  self:checkDestroyed()
+  assert(type(volume) == "number", 'volume must be a number')
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    playerOptions = {
+      volume = volume,
+    },
+  })
+  self._volume = volume
+  return self
+end
+
+---Set player to mute or unmute
+---@param enable boolean
+---@return Player
+function Player:setMute(enable)
+	self:checkDestroyed()
+	if enable == self._mute then return self end
+	self._mute = enable
+	self._voice._mute = self._mute
+	self._voice:sendVoiceUpdate()
+	return self
+end
+
+---Stop all avtivities and reset to default
+---@param destroy boolean
+---@return Player
+function Player:stop(destroy)
+	self:checkDestroyed()
+	if (destroy) then
+		self:destroy()
+		return self
+  end
+
+	self:clear(false)
+  self._node.rest:updatePlayer({
+		guildId = self._guildId,
+		playerOptions = {
+			track = {
+				encoded = nil,
+			},
+		},
+	})
+
+	self._manager:emit(Events.TrackEnd, self, self._queue.current)
+  self._manager:emit(Events.PlayerStop, self)
+
+	return self
+end
+
 ---Reset all data to default
 ---@param emitEmpty boolean
 function Player:clean(emitEmpty)
