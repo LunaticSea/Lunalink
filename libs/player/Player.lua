@@ -159,6 +159,7 @@ function get:voice()
 end
 
 ---Sends server update to lavalink
+---@return nil
 function Player:sendServerUpdate()
   local playerUpdate = {
     guildId = self._guildId,
@@ -174,6 +175,7 @@ function Player:sendServerUpdate()
 end
 
 ---Destroy the player
+---@return nil
 function Player:destroy()
   self:checkDestroyed()
   self._sudoDestroy = true
@@ -410,6 +412,7 @@ end
 
 ---Reset all data to default
 ---@param emitEmpty boolean
+---@return nil
 function Player:clean(emitEmpty)
   self._loop = LoopMode.NONE
   self._queue:clear()
