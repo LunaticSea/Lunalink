@@ -1,3 +1,4 @@
 return {
-  LavalinkFour = require('drivers/LavalinkFour')
+  LavalinkFour = require('drivers/LavalinkFour'),
+  NodelinkTwo = require('drivers/NodelinkTwo')
 }

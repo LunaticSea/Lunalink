@@ -4,26 +4,25 @@ local http = require('coro-http')
 local websocket = require('utils/WebSocket')
 local abstract = require('drivers/AbstractDriver')
 local Functions = require('utils/Functions')
-local LavalinkFour, get = class('LavalinkFour', abstract)
-local sf = string.format
+local NodelinkTwo, get = class('NodelinkTwo', abstract)
 
-function LavalinkFour:__init(lunalink, node)
+function NodelinkTwo:__init(lunalink, node)
   abstract.__init(self)
   self._lunalink = lunalink
   self._node = node
-  self._id = 'koinu'
+  self._id = 'nari'
   self._base_url_form = '%s://%s:%s/v4/%s'
   self._proto_list = node._options.secure
     and { http = 'https', ws = 'wss' }
     or { http = 'http', ws = 'ws' }
-  self._wsUrl = sf(
+  self._wsUrl = string.format(
     self._base_url_form,
     self._proto_list.ws,
     node._options.host,
     node._options.port,
     'websocket'
   )
-  self._httpUrl = sf(
+  self._httpUrl = string.format(
     self._base_url_form,
     self._proto_list.http,
     node._options.host,
@@ -68,10 +67,10 @@ function get:node()
   return self._node
 end
 
-function LavalinkFour:connect()
+function NodelinkTwo:connect()
   local is_resume = self._lunalink._options.config.resume
 
-  local client_name = sf(
+  local client_name = string.format(
     '%s/%s (%s)',
     self._lunalink._manifest.name,
     self._lunalink._manifest.version,
@@ -115,7 +114,7 @@ function LavalinkFour:connect()
   self._wsClient:connect()
 end
 
-function LavalinkFour:requester(options)
+function NodelinkTwo:requester(options)
   options = options or {}
   local req_body = ''
   if string.match(options.path ,'/sessions') and self._sessionId == nil then
@@ -153,30 +152,33 @@ function LavalinkFour:requester(options)
 
   local final_data = json.decode(res_body_string)
 
+  if final_data.loadType then
+    final_data = self:convertV4trackResponse(final_data)
+  end
+
   self:debug("%s %s %s", req_method, url, req_body)
 
   return final_data or res_body_string
 end
 
-function LavalinkFour:wsClose()
+function NodelinkTwo:convertV4trackResponse(nl2Data)
+  if not nl2Data then return {} end
+  local ignore_list = { 'track', 'playlist', 'search', 'empty', 'error', 'shorts' }
+  for _, value in pairs(ignore_list) do
+    if nl2Data.loadType == value then return nl2Data
+    else
+      nl2Data.loadType = 'track'
+      return nl2Data
+    end
+  end
+end
+
+function NodelinkTwo:wsClose()
   if self._wsClient then self._wsClient:close(1000, 'Self close') end
 end
 
-function LavalinkFour:updateSession(sessionId, mode, timeout)
-  error('driver function: updateSession missing')
-  local options = {
-    path = sf('/sessions/%s', sessionId),
-    headers = {
-      { 'content-type', 'application/json' },
-    },
-    method = 'PATCH',
-    data = {
-      resuming = mode,
-      timeout = timeout,
-    }
-  }
-  self:debug("Session updated! resume: %s, timeout: %s", mode, timeout)
-  self:requester(options)
+function NodelinkTwo:updateSession(sessionId, mode, timeout)
+  self:debug('WARNING: Nodelink doesn\'t support resuming, set resume to true is useless')
 end
 
-return LavalinkFour
+return NodelinkTwo

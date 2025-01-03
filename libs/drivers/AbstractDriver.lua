@@ -103,7 +103,7 @@ end
 
 function AbstractDriver:debug(logs, ...)
 	local pre_res = string.format(logs, ...)
-	local res = string.format('[Lunalink] / [Node @ %s] / [Driver] / [Lavalink4] | %s', self.node.options.name, pre_res)
+	local res = string.format('[Lunalink] / [Node @ %s] / [Driver] / [%s] | %s', self.node.options.name, self.id, pre_res)
 	self._lunalink:emit(Events.Debug, res)
 end
 
