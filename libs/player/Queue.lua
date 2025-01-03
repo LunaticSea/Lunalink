@@ -70,39 +70,20 @@ end
 ---@param track Track
 ---@return Queue
 function Queue:add(track)
-  if type(track) == "table" then
-    local full_check = self:_some(track, function (t)
-      return t.__name ~= 'LunalinkTrack'
-    end)
-    assert(not full_check, 'Track must be an instance of LunalinkTrack')
-  else
-    assert(track.__name == 'LunalinkTrack', 'Track must be an instance of LunalinkTrack')
-    ---@diagnostic disable-next-line: missing-fields
-    track = { track }
-  end
+  assert(track.__name == 'LunalinkTrack', 'Track must be an instance of LunalinkTrack')
 
   if not self._current then
-    if type(track) == "table" then
-      self._current = self:_shift(track)
-    else
-      self._current = track
-      return self
-    end
+    self._current = track
+    return self
   end
 
-  if type(track) == "table" then
-    for _, value in pairs(track) do
-      table.insert(self._list, value)
-    end
-  else
-    table.insert(self._list, track)
-  end
+  table.insert(self._list, track)
 
   self._lunalink:emit(
     Events.QueueAdd,
     self._player,
     self,
-    type(track) == "table" and track or { track }
+    track
   )
 
   return self

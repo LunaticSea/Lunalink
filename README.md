@@ -43,39 +43,105 @@ This is the list of all rainlink driver currently supported (codename is made up
 
 ```lua
 local discordia = require('discordia')
-local client = discordia.Client()
-
+local client = discordia.Client({
+  gatewayIntents = 53608447
+})
 local lunalink = require('lunalink')
+local f = string.format
 
 local manager = lunalink.Core({
   nodes = {
     {
-      name = "Test connection",
+      name = "test",
       host = "localhost",
       secure = false,
       auth = "youshallnotpass",
       port = 2333
     }
   },
-  library = lunalink.library.Discordia(client),
-  plugins = {},
-  config = {
-    retryCount = 999,
-  }
+  library = lunalink.library.Discordia(client)
 })
 
 manager:on('debug', function (log)
   print(log)
 end)
 
-client:on('ready', function()
-	print('Logged in as '.. client.user.username)
+manager:on('nodeConnect', function (node)
+  print(f("Lavalink [%s] Ready!", node.options.name))
 end)
 
-client:on('messageCreate', function(message)
-	if message.content == '!ping' then
-		message.channel:send('Pong!')
-	end
+manager:on('nodeError', function (node, err)
+  print(f("Lavalink [%s] error: %s", node.options.name, err))
+end)
+
+manager:on('nodeClosed', function (node)
+  print(f("Lavalink [%s] Closed!", node.options.name))
+end)
+
+manager:on('nodeDisconnect', function (node, code, reason)
+  print(f("Lavalink [%s] Disconnected, Code %s, Reason %s", node.options.name, code, reason))
+end)
+
+manager:on("trackStart", function (player, track)
+  client.guilds:get(player.guildId).textChannels:get(player.textId):send(
+    f("Now playing **%s** by **%s**", track.title, track.author)
+  )
+end);
+
+manager:on("trackEnd", function (player)
+  client.guilds:get(player.guildId).textChannels:get(player.textId):send(
+    "Finished playing"
+  )
+end);
+
+manager:on("queueEmpty", function (player)
+  client.guilds:get(player.guildId).textChannels:get(player.textId):send(
+    "Destroyed player due to inactivity."
+  )
+  player:destroy()
+end);
+
+client:on('messageCreate', function (message)
+  if message.author.bot then return end
+
+  local play_q = string.match(message.content, "%!play (.+)")
+
+  if play_q then
+    local channel = message.member.voiceChannel
+    if not channel then return message:reply("You need to be in a voice channel to use this command!") end
+
+    local player = manager.players:create({
+      guildId = message.guild.id,
+      textId = message.channel.id,
+      voiceId = channel.id,
+      shardId = 0,
+      volume = 100
+    })
+
+    local result = manager:search(play_q, { requester = message.author })
+    if #result.tracks == 0 then return message:reply("No results found!") end
+
+    if result.type == "PLAYLIST" then
+      for _, track in pairs(result.tracks) do
+        player.queue:add(track)
+      end
+    else player.queue:add(result.tracks[1]) end
+
+    if not player.playing then player:play() end
+
+    return message:reply({ content = f("Queued %s", result.tracks[1].title) });
+  end
+
+  local is_stop = string.match(message.content, "%!stop")
+
+  if is_stop then
+    local player = manager.players:get(message.guild.id)
+    if player then
+      player:destroy()
+      return message:reply({ content = "Player destroyed" })
+    end
+    return message:reply({ content = "No player have to destroy" })
+  end
 end)
 
 client:run('Bot INSERT_TOKEN_HERE')

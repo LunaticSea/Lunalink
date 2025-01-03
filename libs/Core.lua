@@ -201,6 +201,8 @@ function Lunalink:search(query, options)
 				self._options.config.defaultSearchEngine or 'youtube'
 			)
 
+	if options.sourceID then source = options.sourceID end
+
 	local finalQuery =
 		isDirectSearch ~= nil and isDirectSearch[2] or (not isUrl
 		and  string.format('%ssearch:%s', source, query)
