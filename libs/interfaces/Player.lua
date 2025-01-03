@@ -35,3 +35,13 @@
 ---@field nodeName string Target node name
 ---@field deaf boolean Whenever the bot is deaf
 ---@field mute boolean Whenever the bot is mute
+
+---Some avaliable options for play functions
+---@class PlayOptions
+---<!tag:properties>
+---@field noReplace boolean Don't replace the current track
+---@field pause boolean Whenever you want to pause the track or not
+---@field startTime number When you want to start the track
+---@field endTime number When you want to end the track
+---@field replaceCurrent boolean Whenever you want to replace the current track or not
+---@field position number The start position of the track

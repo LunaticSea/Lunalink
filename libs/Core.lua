@@ -238,7 +238,7 @@ function Lunalink:search(query, options)
 	self:emit(
 		Events.Debug,
 		string.format(
-			'[Rainlink] / [Search] | Searched %s; Track results: %s',
+			'[Lunalink] / [Search] | Searched %s; Track results: %s',
 			query, #normalizedData.tracks
 		)
 	)

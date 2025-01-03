@@ -203,6 +203,90 @@ function Player:destroy()
   self._sudoDestroy = false
 end
 
+---Play a track
+---@param track Track | nil
+---@param options PlayOptions | nil
+---@return Player
+function Player:play(track, options)
+  options = options or {}
+
+  self:checkDestroyed()
+
+  if track and track.__name ~= 'LunalinkTrack' then
+    p(track.__name)
+    error('track must be a LunalinkTrack')
+  end
+
+  if not track and self._queue.totalSize == 0 then
+    error('No track is available to play')
+  end
+
+  if not options or type(options.replaceCurrent)  ~= "boolean" then
+    local additional = {
+      replaceCurrent = false
+    }
+    for k, v in pairs(additional) do
+      options[k] = v
+    end
+  end
+
+  if track then
+    if not options.replaceCurrent and self._queue.current then
+      table.insert(self._queue._list, self._queue.current, 1)
+    end
+    self._queue._current = track
+  elseif not self._queue.current then
+    self._queue._current = self._queue:_shift(self._queue._list)
+  end
+
+  assert(self._queue._current, 'No track is available to play')
+
+  local current = self._queue.current
+
+  local resolveResult = current:resolver(self)
+
+  if not resolveResult or (resolveResult and not resolveResult.isPlayable) then
+    self._lunalink:emit(Events.TrackResolveError, self, current)
+    self:debug("Player resolve error!")
+    self._queue._current = nil
+    if self._queue._size ~= 0 then
+      self:play()
+    else self._lunalink:emit(Events.QueueEmpty, self, self._queue) end
+    return self
+  end
+
+  self._playing = true
+  self._track = current.encoded
+
+
+  local additional = {
+    track = {
+      encoded = current.encoded,
+      length = current.duration,
+    },
+    volume = self._volume,
+  }
+
+  for k, v in pairs(additional) do
+    options[k] = v
+  end
+
+  if (options.paused) then
+    self._paused = options.paused
+    self._playing = not self._paused
+  end
+
+  if options.position then self._position = options.position end
+
+  self._node.rest:updatePlayer({
+    guildId = self._guildId,
+    noReplace = options.noReplace or false,
+    playerOptions = options,
+  })
+
+  return self
+end
+
 ---Disconnect from the voice channel
 ---@return Player
 function Player:disconnect()

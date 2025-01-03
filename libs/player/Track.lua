@@ -25,7 +25,7 @@ local f = string.format
 ---@field raw RawTrack Get all raw details of the track
 ---@field isPlayable boolean Whenever track is able to play or not
 
-local Track, get = class('Track')
+local Track, get = class('LunalinkTrack')
 
 ---The rainlink track class for playing track from lavalink
 ---@param options RawTrack
@@ -152,14 +152,14 @@ function Track:resolver(player, options)
   local overwrite = options and options.overwrite or false
 
   if (self.isPlayable and self._driverName == player.node.driver.id) then
-    self.realUri = self.raw.info.uri
+    self._realUri = self.raw.info.uri
     return self
   end
 
   player.manager.emit(
     Events.Debug,
     f(
-      "[Rainlink] / [Track] | Resolving %s track %s; Source: %s",
+      "[Lunalink] / [Track] | Resolving %s track %s; Source: %s",
       self._source,
       self._title,
       self._source

@@ -1,6 +1,9 @@
 return {
   -- Export main class
   Core = require('Core'),
+  -- Export plugin,
+  Plugin = require('plugins/Plugin'),
+  SourcePlugin = require('plugins/SourcePlugin'),
   -- Export player related class
   AudioFilter = require('player/AudioFilter'),
   Player = require('player/Player'),

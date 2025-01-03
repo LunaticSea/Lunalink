@@ -128,7 +128,7 @@ end
 
 function PlayerEvents:debug(guildId, tag, logs, ...)
   local pre_res = string.format(logs, ...)
-	local res = string.format('[Rainlink] / [Player @ %s] / [Events] / [%s] | %s', guildId, tag, pre_res)
+	local res = string.format('[Lunalink] / [Player @ %s] / [Events] / [%s] | %s', guildId, tag, pre_res)
 	self._lunalink:emit(Events.Debug, res)
 end
 
