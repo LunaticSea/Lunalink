@@ -17,6 +17,7 @@ local WebSocket = class('WebSocket', Emitter)
 ---Initial class for WebSocket class
 ---@param options WebSocketOptions
 function WebSocket:__init(options)
+	options = options or {}
 	Emitter.__init(self)
 	self._config = websocket.parseUrl(options.url)
 	self._config.headers = options.headers

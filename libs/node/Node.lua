@@ -27,6 +27,7 @@ local Node, get = class('Node')
 ---@param lunalink Code
 ---@param options LunalinkNodeOptions
 function Node:__init(lunalink, options)
+  options = options or {}
   self._lunalink = lunalink
   self._options = options
   self._retryCounter = 0
@@ -44,6 +45,14 @@ function Node:__init(lunalink, options)
   end
 
   self._wsEvent = PlayerEvents(lunalink)
+
+  local custom_rest =
+    (self._lunalink._options.config.structures and
+    self._lunalink._options.config.structures.rest)
+
+  self._rest = custom_rest
+    and self._lunalink.options.config.structures.rest(self._lunalink, self._options, self)
+    or Rest(self._lunalink, self._options, self)
 
   self._stats = {
     players = 0,

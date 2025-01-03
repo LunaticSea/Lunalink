@@ -116,6 +116,7 @@ function LavalinkFour:connect()
 end
 
 function LavalinkFour:requester(options)
+  options = options or {}
   local req_body = ''
   if string.match(options.path ,'/sessions') and self._sessionId == nil then
     error('sessionId not initalized! Please wait for lavalink get connected!')

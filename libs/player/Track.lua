@@ -148,6 +148,7 @@ function get:raw()
 end
 
 function Track:resolver(player, options)
+  options = options or {}
   local overwrite = options and options.overwrite or false
 
   if (self.isPlayable and self._driverName == player.node.driver.id) then

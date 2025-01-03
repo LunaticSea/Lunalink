@@ -3,6 +3,7 @@ local json = require('json')
 local FilterData = require('const').FilterData
 local Events = require('const').Events
 local PlayerState = require('enums').PlayerState
+local NULL = json.null
 
 ---This class is for set, clear and managing filter
 ---@class AudioFilter
@@ -87,56 +88,56 @@ end
 ---@param karaoke '{ level = number, monoLevel = number, filterBand = number, filterWidth = number }'
 ---@return Player
 function AudioFilter:setKaraoke(karaoke)
-  return self:setRaw({ karaoke = karaoke or nil })
+  return self:setRaw({ karaoke = karaoke or NULL })
 end
 
 ---Set timescale options
 ---@param timescale '{ speed = number, pitch = number, rate = number }'
 ---@return Player
 function AudioFilter:setTimescale(timescale)
-  return self:setRaw({ karaoke = timescale or nil })
+  return self:setRaw({ karaoke = timescale or NULL })
 end
 
 ---Set tremolo options
 ---@param tremolo '{ frequency = number, depth = number }'
 ---@return Player
 function AudioFilter:setTremolo(tremolo)
-  return self:setRaw({ tremolo = tremolo or nil })
+  return self:setRaw({ tremolo = tremolo or NULL })
 end
 
 ---Set vibrato options
 ---@param vibrato '{ frequency = number, depth = number }'
 ---@return Player
 function AudioFilter:setVibrato(vibrato)
-  return self:setRaw({ vibrato = vibrato or nil })
+  return self:setRaw({ vibrato = vibrato or NULL })
 end
 
 ---Set rotation options
 ---@param rotation '{ rotationHz = number }'
 ---@return Player
 function AudioFilter:setRotation(rotation)
-  return self:setRaw({ rotation = rotation or nil })
+  return self:setRaw({ rotation = rotation or NULL })
 end
 
 ---Set tremolo options
 ---@param distortion '[LavalinkDistortion](https://lavalink.dev/api/rest#rotation)'
 ---@return Player
 function AudioFilter:setDistortion(distortion)
-  return self:setRaw({ distortion = distortion or nil })
+  return self:setRaw({ distortion = distortion or NULL })
 end
 
 ---Set channelMix options
 ---@param channelMix '{ leftToLeft = number, leftToRight = number, rightToLeft = number, rightToRight = number, }'
 ---@return Player
 function AudioFilter:setChannelMix(channelMix)
-  return self:setRaw({ channelMix = channelMix or nil })
+  return self:setRaw({ channelMix = channelMix or NULL })
 end
 
 ---Set lowPass options
 ---@param lowPass '{ smoothing = number }'
 ---@return Player
 function AudioFilter:setLowPass(lowPass)
-  return self:setRaw({ lowPass = lowPass or nil })
+  return self:setRaw({ lowPass = lowPass or NULL })
 end
 
 function AudioFilter:setRaw(filter)

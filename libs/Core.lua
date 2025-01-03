@@ -42,6 +42,7 @@ local Lunalink, get, set = class('Lunalink', Emitter)
 ---(you don't need to call this function only if you want to extend)
 ---@param options LunalinkOptions
 function Lunalink:__init(options)
+	options = options or {}
 	Emitter.__init(self)
   assert(options, 'Please include options to run this library')
 	assert(options.library, 'Please set an new lib to connect, example: \nlibrary = lunalink.library.dia(client) ')
@@ -162,6 +163,7 @@ end
 ---@param options SearchOptions
 ---@return SearchResult
 function Lunalink:search(query, options)
+	options = options or {}
 	local node_name = options and options.node_name and options.node_name or nil
 	local node = self._nodes:getLeastUsed()
 
@@ -204,7 +206,7 @@ function Lunalink:search(query, options)
 		and  string.format('%ssearch:%s', source, query)
 		or query)
 
-	local result = node.rest.resolver(finalQuery)
+	local result = node.rest:resolver(finalQuery)
 	if not result or result.loadType == LavalinkLoadType.EMPTY then
 		return self:buildSearch(nil, {}, SearchResultType.SEARCH)
 	end

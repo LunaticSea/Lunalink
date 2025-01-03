@@ -7,6 +7,7 @@ local enums = require('enums')
 local PlayerState = enums.PlayerState
 local LoopMode = enums.LoopMode
 local LavalinkPlayerEventsEnum = enums.LavalinkPlayerEventsEnum
+local LavalinkEventsEnum = enums.LavalinkEventsEnum
 
 local PlayerEvents = class('PlayerEvents')
 
@@ -15,7 +16,7 @@ function PlayerEvents:__init(lunalink)
 end
 
 function PlayerEvents:initial(data)
-  if data.op == LavalinkPlayerEventsEnum.PlayerUpdate then
+  if data.op == LavalinkEventsEnum.PlayerUpdate then
     return self:PlayerUpdate(data)
   end
   local func = self[data.type]

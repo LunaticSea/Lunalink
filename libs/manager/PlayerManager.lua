@@ -29,6 +29,7 @@ end
 ---@param options VoiceChannelOptions
 ---@return Player
 function PlayerManager:create(options)
+  options = options or {}
   -- Check player exist
   local created_player = self:get(options.guildId)
   if created_player then return created_player end
@@ -49,7 +50,7 @@ function PlayerManager:create(options)
   local get_custom_node = self._lunalink._nodes:get(options.nodeName and options.nodeName or '')
   local node_list = self._lunalink._nodes:full()
   local reigoned_node_list = self:_filter(node_list, function (data)
-    return data[2].node.options.region
+    return data[2].options.region
   end)
 	local reigoned_node = self:_map(reigoned_node_list, function (data)
     return data[2]
@@ -84,7 +85,7 @@ function PlayerManager:create(options)
   end)
 
   -- Finishing up
-  player.state = PlayerState.CONNECTED
+  player._state = PlayerState.CONNECTED
   self:debug('Player created at ' .. options.guildId)
   self._lunalink:emit(Events.PlayerCreate, player)
 

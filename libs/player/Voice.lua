@@ -105,7 +105,7 @@ function Voice:connect()
   self:debug('Requesting Connection')
 
   local timeout = self._lunalink.options.config.voiceConnectionTimeout
-  local status = self:waitFor('connectionUpdate', timeout)
+  local _, status = self:waitFor('connectionUpdate', timeout)
 
   if status == false then
     self:debug('Request Connection Failed')
@@ -113,7 +113,7 @@ function Voice:connect()
   end
 
   assert(status ~= VoiceState.SESSION_ID_MISSING, 'The voice connection is not established due to missing session id')
-  assert(status ~= VoiceState.SESSION_ID_MISSING, 'The voice connection is not established due to missing connection endpoint')
+  assert(status ~= VoiceState.SESSION_ENDPOINT_MISSING, 'The voice connection is not established due to missing connection endpoint')
   assert(status == VoiceState.SESSION_READY, 'Something went wrong with voice connection')
 
   self._state = VoiceConnectState.CONNECTED
@@ -134,21 +134,22 @@ end
 ---Send data to Discord
 ---@param data any
 function Voice:sendDiscord(data)
-  self._lunalink.library:sendPacket(self._shardId, { op = 4, d = data }, false)
+  self._lunalink.library:sendPacket(self._shardId, 4, data)
 end
 
 ---Sets the server update data for this connection
 ---@param data ServerUpdate
 function Voice:setServerUpdate(data)
-  if data.endpoint then
+  if not data.endpoint then
     self:emit('connectionUpdate', VoiceState.SESSION_ENDPOINT_MISSING)
     return
   end
 
-  if self._sessionId then
+  if not self._sessionId then
     self:emit('connectionUpdate', VoiceState.SESSION_ID_MISSING)
     return
   end
+
   self._lastRegion = self._region
   self._region = self:_region_converter(data.endpoint) or nil
 
@@ -173,25 +174,25 @@ function Voice:setStateUpdate(data)
   end
 
   if not self._voiceId then
-    self.state = VoiceConnectState.DISCONNECTED
+    self._state = VoiceConnectState.DISCONNECTED
     self:debug('Channel Disconnected')
   end
 
-  self.deaf = data.self_deaf
-  self.mute = data.self_mute
-  self.sessionId = data.session_id or nil
+  self._deaf = data.self_deaf
+  self._mute = data.self_mute
+  self._sessionId = data.session_id or nil
   self:debug("State Update Received | Channel: %s Session ID: %s", self._voiceId, data.session_id)
 end
 
 ---Disconnect from the voice channel
 ---@return nil
 function Voice:disconnect()
-  self.voiceId = nil
-  self.deaf = false
-  self.mute = false
+  self._voiceId = require('json').null
+  self._deaf = false
+  self._mute = false
   self:removeAllListeners()
   self:sendVoiceUpdate()
-  self.state = VoiceConnectState.DISCONNECTED
+  self._state = VoiceConnectState.DISCONNECTED
   self:debug('Voice disconnected')
 end
 

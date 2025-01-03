@@ -93,7 +93,7 @@ end
 ---@return '[LoadResults](https://lavalink.dev/api/rest.html#load-result-type)'
 function Rest:resolver(data)
   local options = {
-    path = 'loadtracks',
+    path = '/loadtracks',
     params = { identifier = data },
     headers = { { 'content-type', 'application/json' } }
   }

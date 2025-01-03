@@ -8,6 +8,8 @@ local Events = require('const').Events
 local LoopMode = enums.LoopMode
 local PlayerState = enums.PlayerState
 local VoiceConnectState = enums.VoiceConnectState
+local json = require('json')
+local NULL = json.null
 
 ---A class for managing player action.
 ---@class Player
@@ -69,7 +71,7 @@ function Player:__init(lunalink, voice, node)
   self._mute = voice.mute or false
   self._functions = Functions()
   if (self._node.driver.playerFunctions.size ~= 0) then
-    for _, value in pairs(self._node.driver.playerFunctions.full) do
+    for _, value in pairs(self._node.driver.playerFunctions:full()) do
       self._functions:set(value[1], value[2])
     end
   end
@@ -184,13 +186,13 @@ function Player:destroy()
       guildId = self._guildId,
       playerOptions = {
         track = {
-          encoded = nil,
+          encoded = NULL,
           length = 0,
         },
       },
     })
   end
-  self:clear(false)
+  self:clean(false)
   self:disconnect()
   self._node.rest:destroyPlayer(self._guildId)
   self._lunalink.players:delete(self._guildId)
@@ -230,7 +232,7 @@ end
 ---@param options SearchOptions
 ---@return SearchResult
 function Player:search(query, options)
-  options = options and options or {}
+  options = options or {}
   local additional = {
     nodeName = self._node.options.name
   }
@@ -311,7 +313,7 @@ function Player:skip()
     guildId = self._guildId,
     playerOptions = {
       track = {
-        encoded = nil,
+        encoded = NULL,
       },
     },
   })
@@ -382,12 +384,12 @@ function Player:stop(destroy)
 		return self
   end
 
-	self:clear(false)
+	self:clean(false)
   self._node.rest:updatePlayer({
 		guildId = self._guildId,
 		playerOptions = {
 			track = {
-				encoded = nil,
+				encoded = NULL,
 			},
 		},
 	})
@@ -416,8 +418,8 @@ end
 function Player:clean(emitEmpty)
   self._loop = LoopMode.NONE
   self._queue:clear()
-  self._queue.current = nil
-  self._queue.previous.length = 0
+  self._queue._current = nil
+  self._queue._previous = {}
   self._volume = self._lunalink.options.config.defaultVolume or 100
   self._paused = true
   self._playing = false
@@ -459,17 +461,17 @@ function Player:send(data)
 end
 
 function Player:checkDestroyed()
-  assert(self._player._state ~= PlayerState.DESTROYED, 'Player is destroyed')
+  assert(self._state ~= PlayerState.DESTROYED, 'Player is destroyed')
 end
 
 function Player:debug(logs, ...)
 	local pre_res = string.format(logs, ...)
 	local res = string.format(
     '[Lunalink] / [Player @ %s] | %s',
-    self._player._guildId,
+    self._guildId,
     pre_res
   )
-	self._player._lunalink:emit(Events.Debug, res)
+	self._lunalink:emit(Events.Debug, res)
 end
 
 
