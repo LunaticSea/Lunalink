@@ -396,6 +396,18 @@ function Player:stop(destroy)
 	return self
 end
 
+---Set player to deaf or undeaf
+---@param enable boolean
+---@return Player
+function Player:setDeaf(enable)
+	self:checkDestroyed()
+	if enable == self._deaf then return self end
+	self._deaf = enable
+	self._voice._deaf = self._deaf
+	self._voice:sendVoiceUpdate()
+	return self
+end
+
 ---Reset all data to default
 ---@param emitEmpty boolean
 function Player:clean(emitEmpty)
@@ -410,6 +422,37 @@ function Player:clean(emitEmpty)
   self._data:clear()
   self._position = 0
   if emitEmpty then self._lunalink:emit(Events.QueueEmpty, self, self._queue) end
+end
+
+---Set text channel
+---@param textId string
+---@return Player
+function Player:setTextChannel(textId)
+  self:checkDestroyed()
+  self._textId = textId
+  return self
+end
+
+---Set voice channel and move the player to the voice channel
+---@param voiceId string
+---@return Player
+function Player:setVoiceChannel(voiceId)
+  self:checkDestroyed()
+  self:disconnect()
+  self._voiceId = voiceId
+  self._voice._voiceId = voiceId
+  self._voice:connect()
+  self._voice:debug('Player moved to voice channel $s', voiceId)
+  return self
+end
+
+---Send custom player update data to lavalink server
+---@param data UpdatePlayerInfo
+---@return Player
+function Player:send(data)
+  self:checkDestroyed()
+  self._node.rest:updatePlayer(data)
+  return self
 end
 
 function Player:checkDestroyed()
