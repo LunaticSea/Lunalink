@@ -34,7 +34,6 @@ local NULL = json.null
 ---@field shardId string ID of the Shard that contains the guild that contains the connected voice channel
 ---@field filter AudioFilter Filter class to set, clear get the current filter data
 ---@field voice Voice Voice handler class
--- @field _sudoDestroy Core Main manager class
 
 local Player, get = class('Player')
 
@@ -69,7 +68,7 @@ function Player:__init(lunalink, voice, node)
   self._state = PlayerState.DESTROYED
   self._deaf = voice.deaf or false
   self._mute = voice.mute or false
-  self._functions = Functions()
+  self._functions = Functions(self)
   if (self._node.driver.playerFunctions.size ~= 0) then
     for _, value in pairs(self._node.driver.playerFunctions:full()) do
       self._functions:set(value[1], value[2])
