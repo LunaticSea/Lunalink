@@ -1,5 +1,5 @@
 return {
-	name = 'lunalink',
+	name = 'RainyXeon/lunalink',
 	version = '0.0.1',
 	description = 'A simple description of my little package.',
 	tags = { 'lua', 'lit', 'luvit' },
@@ -14,5 +14,9 @@ return {
 		'luvit/coro-websocket@3.1.1',
 		'luvit/secure-socket@1.2.4',
 	},
-	files = { '**.lua', '!test*', 'docref' },
+	files = {
+		'**.lua',
+		'!test*',
+		'!bot.lua',
+	},
 }
