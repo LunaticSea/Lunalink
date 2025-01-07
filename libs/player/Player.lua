@@ -544,7 +544,9 @@ function Player:send(data)
 end
 
 function Player:checkDestroyed()
-  assert(self._state ~= PlayerState.DESTROYED, 'Player is destroyed')
+  if self._state == PlayerState.DESTROYED then
+    error('Player is destroyed')
+  end
 end
 
 function Player:debug(logs, ...)
