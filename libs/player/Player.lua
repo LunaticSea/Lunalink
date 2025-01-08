@@ -477,8 +477,8 @@ function Player:stop(destroy)
 		},
 	})
 
-	self._manager:emit(Events.TrackEnd, self, self._queue.current)
-  self._manager:emit(Events.PlayerStop, self)
+	self._lunalink:emit(Events.TrackEnd, self, self._queue.current)
+  self._lunalink:emit(Events.PlayerStop, self)
 
 	return self
 end
@@ -507,7 +507,7 @@ function Player:clean(emitEmpty)
   self._paused = true
   self._playing = false
   self._track = nil
-  self._data:clear()
+  if not self._data:get('sudo-destroy') then self._data:clear() end
   self._position = 0
   if emitEmpty then self._lunalink:emit(Events.QueueEmpty, self, self._queue) end
 end
