@@ -212,7 +212,6 @@ function Player:play(track, options)
   self:checkDestroyed()
 
   if track and track.__name ~= 'LunalinkTrack' then
-    p(track.__name)
     error('track must be a LunalinkTrack')
   end
 
